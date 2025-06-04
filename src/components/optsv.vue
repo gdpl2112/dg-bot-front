@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 
 import axios from "axios";
 import {onMounted, ref} from "vue";

@@ -69,6 +69,30 @@ export default defineConfig({
             },'/m': {
                 target: baseUrl,
                 changeOrigin: false,
+            },'/gc0': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/gc1': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/gc2': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/mlist': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/mdel': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/m_add': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/mlist': {
+                target: baseUrl,
+                changeOrigin: false,
+            },'/glist': {
+                target: baseUrl,
+                changeOrigin: false,
             },
         }
     }

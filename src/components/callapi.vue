@@ -104,7 +104,7 @@
 
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 
 import $ from 'jquery'
 import axios from "axios";

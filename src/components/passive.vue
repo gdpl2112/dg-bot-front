@@ -66,7 +66,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {RouterLink} from 'vue-router'
 import {onMounted, ref} from "vue";
 import axios from "axios";

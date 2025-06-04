@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import $ from 'jquery'
