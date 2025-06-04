@@ -1,0 +1,138 @@
+<style>
+
+</style>
+
+<template>
+  <center style="color: rgba(161,72,160,0.97);"><h1> Bot代挂信息 个人中心 </h1></center>
+  <div class="container" style="margin-top: 45px">
+    <div class="row" style="margin-bottom: 25px;">
+      <div class="col-2"></div>
+      <div style="border-radius: 15px;background-color: rgba(142,211,180,0.4);text-align: center;" class="col-8">
+        <br>
+        <img style="max-width: 75px" :src="user.icon" alt="icon">
+        <br>
+        <br>
+        <div class="media-body">
+          <br>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">QQ</span>
+            </div>
+            <input type="text" aria-label="name" class="form-control" :value="user.qid">
+          </div>
+          <br>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">昵称</span>
+            </div>
+            <input type="text" aria-label="name" class="form-control" :value="user.nickname">
+          </div>
+          <br>
+          <div class="input-group form-inline justify-content-center">
+            <div class="alert alert-secondary" role="alert">
+              代挂剩余时间:
+              <div :class="'form-group mx-sm-5 mb-2 '+ je0(user.expire)">{{ je(user.expire) }}</div>
+            </div> &nbsp;&nbsp;
+            <div class="alert alert-secondary" role="alert">
+              自上次登录已在线时长:
+              <div :class="'form-group mx-sm-5 mb-2 '+ ji0(user.t0)">{{ formatMsgTime1(user.t0, "未在线") }}
+              </div>
+            </div>
+          </div>
+          <br>
+          <hr>
+          <div class="alert alert-info" role="alert">
+            <RouterLink to="/conf" type="button" class="btn btn-outline-info">配置中心</RouterLink>
+          </div>
+          <hr>
+          <div class="input-group form-inline">
+
+            <div class="alert alert-info" role="alert">
+              管理员数: {{ count.mc }} &nbsp;
+              <RouterLink to="/manager" type="button" class="btn btn-info">管理</RouterLink>
+            </div>
+            &nbsp;&nbsp;
+            <div class="alert alert-secondary" role="alert">
+              cron任务数: {{ count.cc }} &nbsp;
+              <RouterLink to="/cron-list" type="button" class="btn btn-secondary">管理</RouterLink>
+            </div> &nbsp;&nbsp;
+
+            <div class="alert alert-warning" role="alert">
+              被动消息数: {{ count.pc }} &nbsp;
+              <RouterLink to="/passive" type="button" class="btn btn-warning">管理</RouterLink>
+            </div>
+
+            <div class="alert alert-primary" role="alert">
+              调用api数: {{ count.cac }} &nbsp;
+              <RouterLink to="/callapi" type="button" class="btn btn-light">管理</RouterLink>
+            </div>&nbsp;&nbsp;
+
+            <div class="alert alert-success" role="alert">
+              扩展
+              <RouterLink to="/optsv" type="button" class="btn btn-success">可选内置功能</RouterLink>
+            </div>
+          </div>
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="js">
+import {onMounted, ref} from "vue";
+import axios from "axios";
+
+import {formatMsgTime1} from "@/assets/utils";
+
+let user = ref({t0: -1})
+
+let count = ref({mc: 0, cc: 0, pc: 0})
+
+onMounted(() => {
+
+  axios.get('/user').then(response => {
+    user.value = response.data
+    if (user.value.t0 > 0) {
+      setInterval(function () {
+        user.value.t0++;
+      }, 1000)
+    }
+  })
+  axios.get('/statistics').then(response => {
+    count.value = response.data
+  })
+})
+
+function je(t) {
+  let dateTime = new Date(t)
+  let nowTime = new Date()
+  if (nowTime.getTime() > dateTime.getTime()) {
+    return "已过期"
+  } else {
+    let year = dateTime.getFullYear()
+    let month = dateTime.getMonth() + 1
+    let day = dateTime.getDate()
+    return "至" + year + "-" + month + "-" + day
+  }
+}
+
+function je0(t) {
+  let dateTime = new Date(t)
+  let nowTime = new Date()
+  if (nowTime.getTime() > dateTime.getTime()) {
+    return "alert alert-danger"
+  } else {
+    return "alert alert-success"
+  }
+}
+
+function ji0(t) {
+  if (t <= 0) {
+    return "alert alert-danger"
+  } else {
+    return "alert alert-success"
+  }
+}
+
+</script>
