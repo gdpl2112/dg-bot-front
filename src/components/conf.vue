@@ -56,20 +56,20 @@
       <div class="row">
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">监听开启:</span>
+            <span class="input-group-text">调用开启:</span>
           </div>
-          <input id="open1" type="text" class="form-control" aria-label="">
+          <input id="open0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
-            <button v-on:click="modify('open1')" type="button" class="btn btn-outline-primary">修改</button>
+            <button v-on:click="modify('open0')" type="button" class="btn btn-outline-primary">修改</button>
           </div>
         </div>
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">监听关闭:</span>
+            <span class="input-group-text">调用关闭:</span>
           </div>
-          <input id="close1" type="text" class="form-control" aria-label="">
+          <input id="close0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
-            <button v-on:click="modify('close1')" type="button" class="btn btn-outline-primary">修改
+            <button v-on:click="modify('close0')" type="button" class="btn btn-outline-primary">修改
             </button>
           </div>
         </div>
