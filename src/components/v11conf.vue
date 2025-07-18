@@ -21,6 +21,10 @@
                   :class="'btn mb-3 btn-'+(data.autoLike?'success':'danger' )" style="margin-top: 14px">
             {{ (data.autoLike ? '当前开启' : '当前关闭') }}
           </button>
+
+          <button v-on:click="adn()" type="button" class="btn mb-3 btn-info" style="margin-top: 14px">
+            立刻执行
+          </button>
         </div>
       </form>
       <form class="row g-3 alert">
@@ -30,11 +34,15 @@
                   :class="'btn mb-3 btn-'+(data.autoLikeYesterday?'success':'danger' )" style="margin-top: 14px">
             {{ (data.autoLikeYesterday ? '当前开启' : '当前关闭') }}
           </button>
+
+          <button v-on:click="ydn()" type="button" class="btn mb-3 btn-info" style="margin-top: 14px">
+            立刻执行
+          </button>
         </div>
       </form>
       <form class="row g-3 alert">
         <div class="alert alert-secondary" role="alert" style="border-radius: 15px">
-          空间自动点赞  #尚未实现
+          空间自动点赞 #尚未实现
           <button v-on:click="modify('autoLikeYesterday',!data.autoZoneLike)" type="button"
                   :class="'btn mb-3 btn-'+(data.autoZoneLike?'success':'danger' )" style="margin-top: 14px">
             {{ (data.autoZoneLike ? '当前开启' : '当前关闭') }}
@@ -46,7 +54,8 @@
       <form class="row g-3 alert">
         <div class="alert alert-secondary" role="alert" style="border-radius: 15px">
           <label for="exampleFormControlTextarea1" class="form-label">自动打卡群设置</label>
-          <textarea class="form-control" id="sgtt" rows="3" placeholder="用英文分号(;)分隔群聊ID">{{data.signGroups}}</textarea>
+          <textarea class="form-control" id="sgtt" rows="3"
+                    placeholder="用英文分号(;)分隔群聊ID">{{data.signGroups}}</textarea>
           <button v-on:click="modify('signGroups',$('#sgtt').val())" type="button"
                   :class="'btn mb-3 btn-outline-primary'" style="margin-top: 14px"> 应用设置
           </button>
@@ -90,6 +99,22 @@ function modify(key: String, value: String) {
   axios.get("/api/v11/modify-conf?key=" + key + "&value=" + value).then(function (response) {
     data.value = response.data;
     alert("修改成功")
+  }).catch(function (err) {
+    alert(err);
+  })
+}
+
+function ydn() {
+  axios.get("/api/v11/autoLikeYesterdayNow").then(function (response) {
+    alert(response.data)
+  }).catch(function (err) {
+    alert(err);
+  })
+}
+
+function adn() {
+  axios.get("/api/v11/autoLikeNow").then(function (response) {
+    alert(response.data)
   }).catch(function (err) {
     alert(err);
   })
