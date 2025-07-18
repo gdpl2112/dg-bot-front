@@ -3,11 +3,11 @@
 </style>
 
 <template>
-  <center style="color: rgba(161,72,160,0.97);"><h1> Bot代挂信息 个人中心 </h1></center>
+  <center style="color: rgba(255,79,152,0.97);"><h1> Bot代挂信息 个人中心 </h1></center>
   <div class="container" style="margin-top: 45px">
     <div class="row" style="margin-bottom: 25px;">
       <div class="col-2"></div>
-      <div style="border-radius: 15px;background-color: rgba(142,211,180,0.4);text-align: center;" class="col-8">
+      <div style="border-radius: 25px;background-color: rgba(86,117,105,0.4);text-align: center;" class="col-8">
         <br>
         <img style="max-width: 75px" :src="user.icon" alt="icon">
         <br>
@@ -53,7 +53,7 @@
             </div>
             &nbsp;&nbsp;
             <div class="alert alert-secondary" role="alert">
-              cron任务数: {{ count.cc }} &nbsp;
+              定时任务数: {{ count.cc }} &nbsp;
               <RouterLink to="/cron-list" type="button" class="btn btn-secondary">管理</RouterLink>
             </div> &nbsp;&nbsp;
 
@@ -68,9 +68,16 @@
             </div>&nbsp;&nbsp;
 
             <div class="alert alert-success" role="alert">
-              扩展
-              <RouterLink to="/optsv" type="button" class="btn btn-success">可选内置功能</RouterLink>
-            </div>
+              内置扩展
+              <RouterLink to="/optsv" type="button" class="btn btn-success">可选功能</RouterLink>
+            </div>&nbsp;&nbsp;
+
+            <div class="alert alert-dark" role="alert">
+              v11功能
+              <RouterLink to="/v11c" type="button" class="btn btn-dark">管理</RouterLink>
+            </div> &nbsp;&nbsp;
+
+
           </div>
         </div>
         <br>

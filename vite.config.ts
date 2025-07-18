@@ -36,6 +36,9 @@ export default defineConfig({
             }, '/user': {
                 target: baseUrl,
                 changeOrigin: false,
+            }, '/api': {
+                target: baseUrl,
+                changeOrigin: false,
             }, '/code-modify': {
                 target: baseUrl,
                 changeOrigin: false,

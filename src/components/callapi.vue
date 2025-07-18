@@ -3,7 +3,11 @@
 </style>
 
 <template>
-
+  <center>
+    <RouterLink style="width: 50%" to="/bot" type="button" class="btn btn-lg btn-block btn-outline-success">返回个人首页
+    </RouterLink>
+  </center>
+  <hr>
   <div class="modal fade" id="appendModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -109,6 +113,7 @@
 import $ from 'jquery'
 import axios from "axios";
 import {onMounted, ref} from "vue";
+import {RouterLink} from "vue-router";
 
 
 function submit0() {

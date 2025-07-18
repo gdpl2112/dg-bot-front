@@ -13,6 +13,7 @@ import passive from '../components/passive.vue'
 import optsv from '../components/optsv.vue'
 import callapi from '../components/callapi.vue'
 import um from '../components/um.vue'
+import v11c from '../components/v11conf.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,10 @@ const router = createRouter({
             path: '/um',
             name: 'um',
             component: um,
+        },{
+            path: '/v11c',
+            name: 'v11c',
+            component: v11c,
         },
     ],
 })
