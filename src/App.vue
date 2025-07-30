@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {RouterView} from 'vue-router'
+import router from "@/router";
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light tm-0">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light tm-0" style="border-radius: 10px">
     <a class="navbar-brand" href="/">
       <img style="opacity: 0.86;max-width: 50px; border-radius: 999px"
            class="navbar-brand" src="http://kloping.top/icon.jpg" alt="qq"></a>
@@ -20,6 +21,9 @@ import {RouterView} from 'vue-router'
         </li>
         <li class="nav-item">
           <a class="nav-link" href="http://kloping.top/">kloping's</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click="router.push('/join')">请求帮助</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled">更多功能;敬请期待.</a>
@@ -42,8 +46,12 @@ import {RouterView} from 'vue-router'
 
   <br>
   <hr>
-  <center>power by github@kloping use vue3</center>
-  <center>update time on 25/06/04</center>
+  <center>
+    <div style="background-color: rgba(221,221,221,0.6);width: 40%;border-radius: 33px;color: black;">
+      <center>power by github@<b>kloping</b> use vue3</center>
+      <center>update time on <strong>25/07/30</strong></center>
+    </div>
+  </center>
   <hr>
   <br>
 </template>

@@ -1,5 +1,5 @@
 
-function formatMsgTime(timespan) {
+export function formatMsgTime(timespan) {
     let dateTime = new Date(timespan)
     let year = dateTime.getFullYear()
     let month = dateTime.getMonth() + 1

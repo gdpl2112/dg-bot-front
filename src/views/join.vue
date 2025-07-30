@@ -5,12 +5,14 @@
 <template>
   <div class="tm-1 jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-4">请选择以下任一方式申请</h1><br>
+      <h1 class="display-4">请选择以下任一方式咨询</h1><br>
     </div>
   </div>
   <div class="container">
     <div class="row">
       <div class="card col-4" style="width: 18rem;">
+        <hr>
+        <h4>个人私信</h4>
         <img src="/img/sm-card.png" class="card-img-top" style="margin-top: 15px" alt="">
         <div class="card-body">
           <h5 class="card-title">联系询问</h5>
@@ -18,6 +20,8 @@
         </div>
       </div>
       <div class="card col-4" style="width: 18rem;">
+        <hr>
+        <h4>群聊讨论</h4>
         <img src="/img/sm-card1.png" class="card-img-top" style="margin-top: 15px" alt="">
         <div class="card-body">
           <h5 class="card-title">进群询问</h5>
@@ -26,6 +30,8 @@
         </div>
       </div>
       <div class="card col-4" style="width: 18rem;">
+        <hr>
+        <h4>频道咨询(不在推荐)</h4>
         <img src="/img/sm-card2.jpg" class="card-img-top" style="margin-top: 15px" alt="">
         <div class="card-body">
           <h5 class="card-title">进频道询问</h5>

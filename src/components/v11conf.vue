@@ -43,7 +43,7 @@
       <form class="row g-3 alert">
         <div class="alert alert-secondary" role="alert" style="border-radius: 15px">
           空间自动点赞 #尚未实现
-          <button v-on:click="modify('autoLikeYesterday',!data.autoZoneLike)" type="button"
+          <button v-on:click="modify('autoZoneLike',!data.autoZoneLike)" type="button"
                   :class="'btn mb-3 btn-'+(data.autoZoneLike?'success':'danger' )" style="margin-top: 14px">
             {{ (data.autoZoneLike ? '当前开启' : '当前关闭') }}
           </button>
