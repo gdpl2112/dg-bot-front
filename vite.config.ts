@@ -96,6 +96,9 @@ export default defineConfig({
             },'/glist': {
                 target: baseUrl,
                 changeOrigin: false,
+            },'/conf-modify': {
+                target: baseUrl,
+                changeOrigin: false,
             },
         }
     }

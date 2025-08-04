@@ -73,6 +73,8 @@
             </button>
           </div>
         </div>
+      </div>
+      <div class="row">
         <small class="form-text text-muted">纯数字为好友f(id);g(id)为群聊;找不到时则发到自己bot</small>
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
@@ -83,7 +85,19 @@
             <button v-on:click="modify('rsid')" type="button" class="btn btn-outline-primary">修改</button>
           </div>
         </div>
+
+        <div class="input-group col-sm  mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">状态查看:</span>
+          </div>
+          <input id="status0" type="text" class="form-control" aria-label="">
+          <div class="input-group-append">
+            <button v-on:click="modify('status0')" type="button" class="btn btn-outline-primary">修改</button>
+          </div>
+        </div>
+
       </div>
+
       <div class="row">
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
@@ -114,7 +128,18 @@
             </button>
           </div>
         </div>
+        <div class="input-group col-sm  mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">删词关键词:</span>
+          </div>
+          <input id="del0" type="text" class="form-control" aria-label="">
+          <div class="input-group-append">
+            <button v-on:click="modify('del0')" type="button" class="btn btn-outline-primary">修改
+            </button>
+          </div>
+        </div>
       </div>
+
       <hr>
       <small class="form-text text-muted">通知(当bot上线/离线是访问指定url)</small>
       <div class="input-group mb-3">
