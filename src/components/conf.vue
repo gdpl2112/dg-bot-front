@@ -154,12 +154,19 @@
       <div class="alert alert-info text-center" role="alert">
         自定义脚本 与API调用 共用开关
       </div>
-      <button v-on:click="codePost('code')" type="button"
-              class="btn btn-primary btn-lg btn-block">修改
-      </button>
-      <button v-on:click="getException()" type="button"
-              class="btn btn-primary btn-lg btn-block">获取报错
-      </button>
+
+      <div style="width: 80%;margin-left: 10%;font-weight: bold;">
+          <button v-on:click="codePost('code')" type="button"
+                  class="btn btn-outline-success btn-lg btn-block">修改
+          </button>
+          <button v-on:click="getException()" type="button"
+                  class="btn btn-primary btn-lg btn-block">获取报错
+          </button>
+          <button v-on:click="getLogMsg()" type="button"
+                  class="btn btn-secondary btn-lg btn-block">获得日志
+          </button>
+      </div>
+
       <hr>
       <div class="input-group">
                 <textarea style="height: 240px" id="code" class="form-control" aria-label="js 脚本"
@@ -177,7 +184,7 @@
           <h5 class="modal-title" id="moda-label">报错详情</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
         </div>
-        <div class="modal-body text-danger">
+        <div class="modal-body text-danger" id="modal_body">
           <samp id="modal-body">
 
           </samp>
@@ -240,6 +247,22 @@ function getException() {
   axios.get("/get-exception").then(function (response) {
     $("#moda-label").html("时间: " + formatMsgTime(response.data.time))
     $("#modal-body").html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
+    $("#modal_body").addClass("text-danger")
+    $('#modal-a').modal('show')
+  }).catch(function (err) {
+    alert(err);
+  })
+}
+
+function getLogMsg() {
+  axios.get("/get-log").then(function (response) {
+    $("#moda-label").html("日志信息")
+    var hb = ""
+    response.data.forEach(function (value) {
+      hb += ("<p>" + value + "</p>")
+    })
+    $("#modal-body").html(hb)
+    $("#modal_body").removeClass("text-danger")
     $('#modal-a').modal('show')
   }).catch(function (err) {
     alert(err);

@@ -45,6 +45,9 @@ export default defineConfig({
             }, '/get-exception': {
                 target: baseUrl,
                 changeOrigin: false,
+            }, '/get-log': {
+                target: baseUrl,
+                changeOrigin: false,
             }, '/config': {
                 target: baseUrl,
                 changeOrigin: false,
