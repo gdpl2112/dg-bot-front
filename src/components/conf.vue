@@ -156,18 +156,22 @@
       </div>
 
       <div style="width: 80%;margin-left: 10%;font-weight: bold;">
-          <button v-on:click="codePost('code')" type="button"
-                  class="btn btn-outline-success btn-lg btn-block">修改
-          </button>
-          <button v-on:click="getException()" type="button"
-                  class="btn btn-primary btn-lg btn-block">获取报错
-          </button>
-          <button v-on:click="getLogMsg()" type="button"
-                  class="btn btn-secondary btn-lg btn-block">获得日志
-          </button>
+        <button v-on:click="codePost('code')" type="button"
+                class="btn btn-outline-success btn-lg btn-block">修改
+        </button>
+        <button v-on:click="getException()" type="button"
+                class="btn btn-primary btn-lg btn-block">获取报错
+        </button>
+        <button v-on:click="getLogMsg()" type="button"
+                class="btn btn-secondary btn-lg btn-block">获得日志
+        </button>
       </div>
 
       <hr>
+      <center>
+        <p style="background-color: rgba(204,204,204,0.34);width: 80%;border-radius: 10px">示例js代码 使用Java Nashorn引擎 <a
+          href="https://github.com/gdpl2112/dg-script">详见仓库</a>参考模版API</p>
+      </center>
       <div class="input-group">
                 <textarea style="height: 240px" id="code" class="form-control" aria-label="js 脚本"
                           placeholder="java script 自定义脚本">

@@ -49,7 +49,7 @@ import router from "@/router";
   <center>
     <div style="background-color: rgba(221,221,221,0.6);width: 40%;border-radius: 33px;color: black;">
       <center>power by github@<b>kloping</b> use vue3</center>
-      <center>update time on <strong>25/07/30</strong></center>
+      <center>update time on <strong>25/08/05</strong></center>
     </div>
   </center>
   <hr>
