@@ -152,7 +152,7 @@
         </div>
       </div>
       <div class="alert alert-info text-center" role="alert">
-        自定义脚本 与API调用 共用开关
+        自定义脚本与[API调用]共用开关
       </div>
 
       <div style="width: 80%;margin-left: 10%;font-weight: bold;">

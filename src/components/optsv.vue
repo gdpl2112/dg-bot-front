@@ -11,7 +11,7 @@
   <div class="container bg-light">
     <div class="row">
       <div class="col-12 center-block" id="table_main">
-        <small class="form-text text-muted"> 与API调用 共用开关 </small>
+        <small class="form-text text-muted">与[被动回复]共用开关 </small>
         <div class="container">
           <hr>
           <div class="row ">

@@ -87,6 +87,9 @@ export default defineConfig({
             },'/mlist': {
                 target: baseUrl,
                 changeOrigin: false,
+            },'/flist': {
+                target: baseUrl,
+                changeOrigin: false,
             },'/mdel': {
                 target: baseUrl,
                 changeOrigin: false,
