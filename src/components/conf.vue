@@ -263,7 +263,7 @@ function getException() {
 
 function getLogMsg() {
   axios.get("/api/get-log").then(function (response) {
-    $("#moda-label").html("日志信息")
+    $("#moda-label").html("日志信息 #脚本内使用log.log(str)可打印日志")
     var hb = ""
     response.data.forEach(function (value) {
       hb += ("<p>" + value + "</p>")
