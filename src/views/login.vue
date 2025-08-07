@@ -70,9 +70,9 @@ import {onMounted, ref} from 'vue'
 import router from "@/router/index.js";
 
 let loading = ref(true)
-let botData = ref([])
+let botData = ref([{online: false, nick: '', avatar: '', id: 0}])
 onMounted(() => {
-  fetch('/pre/bot/list')
+  fetch('/api/bot/list')
       .then(response => response.json())
       .then(bots => {
         botData.value = bots;

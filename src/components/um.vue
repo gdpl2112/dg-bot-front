@@ -52,7 +52,7 @@ import {formatMsgTime1} from "@/assets/utils.js";
 
 let list = ref([])
 onMounted(() => {
-  axios.get("/m/list").then(function (response) {
+  axios.get("/api/m/list").then(function (response) {
     list.value = response.data
   }).catch(function (err) {
     alert(err);
@@ -62,7 +62,7 @@ onMounted(() => {
 function modify(id) {
   let auth = $("#auth-" + id).val()
   let exp = $("#exp-" + id).val()
-  axios.get("/m/modify?qid=" + id + "&auth=" + auth + "&exp=" + exp).then(function (response) {
+  axios.get("/api/m/modify?qid=" + id + "&auth=" + auth + "&exp=" + exp).then(function (response) {
     list.value = response.data
     alert("ok")
   }).catch(function (err) {
@@ -84,7 +84,7 @@ onMounted(() => {
     let year = $("#year-" + qid).val()
     let month = $("#month-" + qid).val()
     let day = $("#day-" + qid).val()
-    axios.get("/m/get-exp?y=" + year + "&m=" + month + "&d=" + day).then(function (response) {
+    axios.get("/api/m/get-exp?y=" + year + "&m=" + month + "&d=" + day).then(function (response) {
       $("#exp-" + qid).val(response.data)
     }).catch(function (err) {
       alert(err);
@@ -95,7 +95,7 @@ onMounted(() => {
   $(".i").change(function (e) {
     let qid = $(this).attr("qid")
     let exp = $("#exp-" + qid).val()
-    axios.get("/m/exp-ymd?exp=" + exp).then(function (response) {
+    axios.get("/api/m/exp-ymd?exp=" + exp).then(function (response) {
       let ds = response.data
       $("#year-" + qid).val(ds[0])
       $("#month-" + qid).val(ds[1])

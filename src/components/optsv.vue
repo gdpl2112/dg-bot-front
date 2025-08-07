@@ -55,7 +55,7 @@ import {RouterLink} from "vue-router";
 
 let data = ref([])
 onMounted(()=>{
-  axios.get("/opts").then(function (response) {
+  axios.get("/api/opts").then(function (response) {
     data.value = response.data;
   }).catch(function (err) {
     alert(err);
@@ -66,7 +66,7 @@ function getTrClass() {
 }
 
 function toggle(opt) {
-  axios.get("/opts/toggle?opt=" + opt).then(function (response) {
+  axios.get("/api/opts/toggle?opt=" + opt).then(function (response) {
     data.value = response.data
   }).catch(function (err) {
     alert(err);

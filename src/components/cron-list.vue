@@ -57,7 +57,7 @@ import {RouterLink} from "vue-router";
 let arr1 = ref([])
 
 onMounted(()=>{
-  axios.get("/cron-list").then(function (response) {
+  axios.get("/api/cron-list").then(function (response) {
     arr1.value = response.data
   }).catch(function (err) {
     alert(err);
@@ -65,7 +65,7 @@ onMounted(()=>{
 })
 
 function del(id) {
-  axios.get("/cron-del?id=" + id).then(function (response) {
+  axios.get("/api/cron-del?id=" + id).then(function (response) {
     arr1.value = response.data;
   }).catch(function (err) {
     alert(err);

@@ -33,10 +33,10 @@
                           data-toggle="collapse"
                           :data-target="`#collapse-`+i" aria-expanded="false"
                           :aria-controls="`#collapse-`+i">
-                    {{e.touch}}
+                    {{ e.touch }}
                   </button> &nbsp;&nbsp;
                   <span class="badge badge-pill">
-                                    <span class="badge badge-primary badge-pill">{{e.outs.length}}</span>&nbsp;&nbsp;
+                                    <span class="badge badge-primary badge-pill">{{ e.outs.length }}</span>&nbsp;&nbsp;
                                     <button v-on:click="del(e.touch,null)" type="button"
                                             class="btn btn-danger">删除</button>
                                 </span>
@@ -47,7 +47,7 @@
                     <ul class="list-group list-group-flush">
                       <li class="list-group-item list-group-item-action" v-for="o in e.outs">
                         <div class="d-flex w-100 justify-content-between">
-                          {{o}}
+                          {{ o }}
                           <span class="badge badge-pill">
                                                  <button v-on:click="del(e.touch,o)" type="button"
                                                          class="btn btn-danger">删除</button>
@@ -71,32 +71,31 @@ import {RouterLink} from 'vue-router'
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import $ from 'jquery'
-let  all = ref([])
-onMounted(()=>{
-  axios.get("/p-list").then(function (response) {
+
+let all = ref([])
+onMounted(() => {
+  axios.get("/api/p-list").then(function (response) {
     all.value = response.data
   }).catch(function (err) {
     alert(err);
   })
 })
-function add () {
+
+function add() {
   let inp1 = $("#pas-touch");
   let inp2 = $("#pas-out");
   let t0 = inp1.val()
   let t1 = inp2.val()
-  axios.get("/p-add?t0=" + t0 + "&t1=" + t1).then(function (response) {
+  axios.get("/api/p-add?t0=" + t0 + "&t1=" + t1).then(function (response) {
     all.value = response.data;
     inp2.val("")
   }).catch(function (err) {
     alert(err);
   })
 }
+
 function del(touch, o) {
-  let url = "/p-del?touch=" + touch;
-  if (o !== null) {
-    url = url + "&out=" + o;
-  }
-  axios.get(url).then(function (response) {
+  axios.post("/api/p-del",{touch: touch, out: o} ).then(function (response) {
     if (response.data === true) {
       if (o !== null) {
         all.value = all.value.filter(function (item) {

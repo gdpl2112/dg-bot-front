@@ -178,7 +178,7 @@ onMounted(() => {
     but3.removeClass("active")
     but2.removeClass("active")
     but1.addClass("active")
-    axios.get("/mlist").then(function (response) {
+    axios.get("/api/mlist").then(function (response) {
       list.value = response.data;
     }).catch(function (err) {
       alert(err);
@@ -193,7 +193,7 @@ onMounted(() => {
     but1.removeClass("active")
     but2.addClass("active")
 
-    axios.get("/glist").then(function (response) {
+    axios.get("/api/glist").then(function (response) {
       glist.value = response.data
       oGlist.value = response.data
     }).catch(function (err) {
@@ -210,7 +210,7 @@ onMounted(() => {
     but2.removeClass("active")
     but3.addClass("active")
 
-    axios.get("/flist").then(function (response) {
+    axios.get("/api/flist").then(function (response) {
       flist.value = response.data
       oFlist.value = response.data
     }).catch(function (err) {
@@ -219,7 +219,7 @@ onMounted(() => {
 
   });
 
-  axios.get("/mlist").then(function (response) {
+  axios.get("/api/mlist").then(function (response) {
     list.value = response.data;
   }).catch(function (err) {
     alert(err);
@@ -259,7 +259,7 @@ let oFlist = ref([])
 
 function madd() {
   let id = $("#m_add_i").val();
-  axios.get("/m_add?id=" + id).then(function (response) {
+  axios.get("/api/m_add?id=" + id).then(function (response) {
     if (response.data === true) {
       list.value.splice(0, 0, {"qid": 0, "targetId": id})
     }
@@ -269,8 +269,8 @@ function madd() {
 }
 
 function del(id) {
-  axios.get("/mdel?id=" + id).then(function (response) {
-    axios.get("/mlist").then(function (response) {
+  axios.get("/api/mdel?id=" + id).then(function (response) {
+    axios.get("/api/mlist").then(function (response) {
       list.value = response.data;
     }).catch(function (err) {
       alert(err);
@@ -281,7 +281,7 @@ function del(id) {
 }
 
 function gm0(tid) {
-  axios.get("/gc0?tid=" + tid).then(function (response) {
+  axios.get("/api/gc0?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e) => {
         if (e.tid === tid) e.k0 = !e.k0;
@@ -293,7 +293,7 @@ function gm0(tid) {
 }
 
 function gm1(tid) {
-  axios.get("/gc1?tid=" + tid).then(function (response) {
+  axios.get("/api/gc1?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e) => {
         if (e.tid === tid) e.k1 = !e.k1;
@@ -305,7 +305,7 @@ function gm1(tid) {
 }
 
 function gm2(tid) {
-  axios.get("/gc2?tid=" + tid).then(function (response) {
+  axios.get("/api/gc2?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e) => {
         if (e.tid === tid) e.k2 = !e.k2;

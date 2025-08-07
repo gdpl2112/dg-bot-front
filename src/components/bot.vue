@@ -98,7 +98,7 @@ let count = ref({mc: 0, cc: 0, pc: 0})
 
 onMounted(() => {
 
-  axios.get('/user').then(response => {
+  axios.get('/api/user').then(response => {
     user.value = response.data
     if (user.value.t0 > 0) {
       setInterval(function () {
@@ -106,7 +106,7 @@ onMounted(() => {
       }, 1000)
     }
   })
-  axios.get('/statistics').then(response => {
+  axios.get('/api/statistics').then(response => {
     count.value = response.data
   })
 })

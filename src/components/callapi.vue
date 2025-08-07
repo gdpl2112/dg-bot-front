@@ -128,7 +128,7 @@ function submit0() {
   let v3 = encodeURIComponent(e_touch.val())
   let v4 = encodeURIComponent(e_url.val())
   let v5 = encodeURIComponent(e_jude.val())
-  let url = "/ca/append?out=" + v1
+  let url = "/api/ca/append?out=" + v1
       + "&outArgs=" + v2
       + "&touch=" + v3
       + "&url=" + v4
@@ -169,7 +169,7 @@ let trIndex = 0
 let data = ref([])
 
 onMounted(() => {
-  axios.get("/ca/get_data").then(function (response) {
+  axios.get("/api/ca/get_data").then(function (response) {
     trIndex = 0;
     data.value = response.data;
   }).catch(function (err) {
@@ -184,7 +184,7 @@ function getFavicon(e) {
 }
 
 function delete0(touch) {
-  axios.get("/ca/delete?touch=" + touch).then(function (response) {
+  axios.get("/api/ca/delete?touch=" + touch).then(function (response) {
     trIndex = 0;
     data.value = response.data;
   }).catch(function (err) {

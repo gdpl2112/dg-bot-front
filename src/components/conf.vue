@@ -213,7 +213,7 @@ import {onMounted} from "vue";
 import {formatMsgTime} from "@/assets/utils";
 
 onMounted(() => {
-  axios.get("/config",).then(function (response) {
+  axios.get("/api/config",).then(function (response) {
     let keys = Object.keys(response.data);
     for (let i = 0; i < keys.length; i++) {
       let key = keys[i];
@@ -229,7 +229,7 @@ function modify(id) {
   let key = id;
   let value = $("#" + id).val()
   if (value.indexOf("&") >= 0) value = encodeURIComponent(value)
-  axios.get("/conf-modify?key=" + key + "&value=" + value).then(function (response) {
+  axios.get("/api/conf-modify?key=" + key + "&value=" + value).then(function (response) {
     alert(response.data)
   }).catch(function (err) {
     alert(err);
@@ -240,7 +240,7 @@ function codePost(id) {
   let value = $("#" + id).val()
   let df = new FormData()
   df.set("code", value)
-  axios.post("/code-modify", df).then(function (response) {
+  axios.post("/api/code-modify", df).then(function (response) {
     alert(response.data)
   }).catch(function (err) {
     alert(err);
@@ -248,7 +248,7 @@ function codePost(id) {
 }
 
 function getException() {
-  axios.get("/get-exception").then(function (response) {
+  axios.get("/api/get-exception").then(function (response) {
     $("#moda-label").html("时间: " + formatMsgTime(response.data.time))
     $("#modal-body").html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
     $("#modal_body").addClass("text-danger")
@@ -259,7 +259,7 @@ function getException() {
 }
 
 function getLogMsg() {
-  axios.get("/get-log").then(function (response) {
+  axios.get("/api/get-log").then(function (response) {
     $("#moda-label").html("日志信息")
     var hb = ""
     response.data.forEach(function (value) {

@@ -191,7 +191,7 @@ function submit0() {
   })
   let json = JSON.stringify(obj);
   console.log(json)
-  axios.post("/cronAdd", json).then(function (response) {
+  axios.post("/api/cronAdd", json).then(function (response) {
     let tips = response.data;
     alert(tips);
     if (tips === "ok"){
