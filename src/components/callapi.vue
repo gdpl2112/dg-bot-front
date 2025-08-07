@@ -13,7 +13,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">添加一个API</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭" @click="$('#appendModal').modal('hide')">X</button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"
+                  @click="($('#appendModal') as any).modal('hide')">X</button>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
@@ -41,7 +42,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                  @click="$('#appendModal').modal('hide')">关闭
+                  @click="($('#appendModal') as any).modal('hide')">关闭
           </button>
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="submit0()">确定</button>
         </div>
@@ -123,11 +124,11 @@ function submit0() {
   let e_url = $("#inputGroup-url").next();
   let e_jude = $("#inputGroup-jude").next();
 
-  let v1 = encodeURIComponent(e_out.val())
-  let v2 = encodeURIComponent(e_outArgs.val())
-  let v3 = encodeURIComponent(e_touch.val())
-  let v4 = encodeURIComponent(e_url.val())
-  let v5 = encodeURIComponent(e_jude.val())
+  let v1 = encodeURIComponent(e_out.val() as string)
+  let v2 = encodeURIComponent(e_outArgs.val() as  string)
+  let v3 = encodeURIComponent(e_touch.val() as  string)
+  let v4 = encodeURIComponent(e_url.val() as  string)
+  let v5 = encodeURIComponent(e_jude.val() as  string)
   let url = "/api/ca/append?out=" + v1
       + "&outArgs=" + v2
       + "&touch=" + v3
@@ -149,7 +150,7 @@ function submit0() {
 
 function add0() {
   $('#exampleModalLabel').html('添加一个API');
-  $('#appendModal').modal('show')
+  ($('#appendModal') as any).modal('show')
   let e_out = $("#inputGroup-out").next();
   let e_outArgs = $("#inputGroup-outArgs").next();
   let e_touch = $("#inputGroup-touch").next();
@@ -205,7 +206,7 @@ function modify0(e) {
   e_url.val(e.url)
   e_jude.val(e.jude)
   $('#exampleModalLabel').html('修改一个API');
-  $('#appendModal').modal('show')
+  ($('#appendModal') as any).modal('show')
 }
 
 function getTrClass() {

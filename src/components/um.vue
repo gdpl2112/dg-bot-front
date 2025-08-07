@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import axios from "axios";
 import $ from 'jquery'
 import {formatMsgTime1} from "@/assets/utils.js";
@@ -78,31 +78,37 @@ function ji0(t) {
   }
 }
 
+const handleChange0 = function (this: HTMLElement) {
+  let qid = $(this).attr("qid")
+  let year = $("#year-" + qid).val()
+  let month = $("#month-" + qid).val()
+  let day = $("#day-" + qid).val()
+  axios.get("/api/m/get-exp?y=" + year + "&m=" + month + "&d=" + day).then(function (response) {
+    $("#exp-" + qid).val(response.data)
+  }).catch(function (err) {
+    alert(err);
+  })
+};
+const handleChange1 = function (this: HTMLElement) {
+  let qid = $(this).attr("qid")
+  let exp = $("#exp-" + qid).val()
+  axios.get("/api/m/exp-ymd?exp=" + exp).then(function (response) {
+    let ds = response.data
+    $("#year-" + qid).val(ds[0])
+    $("#month-" + qid).val(ds[1])
+    $("#day-" + qid).val(ds[2])
+  }).catch(function (err) {
+    alert(err);
+  })
+};
+
 onMounted(() => {
-  $(".o").change(function (e) {
-    let qid = $(this).attr("qid")
-    let year = $("#year-" + qid).val()
-    let month = $("#month-" + qid).val()
-    let day = $("#day-" + qid).val()
-    axios.get("/api/m/get-exp?y=" + year + "&m=" + month + "&d=" + day).then(function (response) {
-      $("#exp-" + qid).val(response.data)
-    }).catch(function (err) {
-      alert(err);
-    })
+  $(document).on('change', '.o', handleChange0);
+  $(document).on('change', '.i', handleChange1);
+});
 
-  });
-
-  $(".i").change(function (e) {
-    let qid = $(this).attr("qid")
-    let exp = $("#exp-" + qid).val()
-    axios.get("/api/m/exp-ymd?exp=" + exp).then(function (response) {
-      let ds = response.data
-      $("#year-" + qid).val(ds[0])
-      $("#month-" + qid).val(ds[1])
-      $("#day-" + qid).val(ds[2])
-    }).catch(function (err) {
-      alert(err);
-    })
-  });
-})
+onBeforeUnmount(() => {
+  $(document).off('change', '.o', handleChange0);
+  $(document).off('change', '.i', handleChange1);
+});
 </script>

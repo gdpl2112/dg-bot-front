@@ -18,7 +18,6 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         },
     }, server: {
-        disableHostCheck: true,
         host: '0.0.0.0', // 这个用于启动
         // port: 34740, // 指定启动端口
         open: false, //启动后是否自动打开浏览器

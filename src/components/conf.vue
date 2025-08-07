@@ -169,8 +169,9 @@
 
       <hr>
       <center>
-        <p style="background-color: rgba(204,204,204,0.34);width: 80%;border-radius: 10px">示例js代码 使用Java Nashorn引擎 <a
-          href="https://github.com/gdpl2112/dg-script">详见仓库</a>参考模版API</p>
+        <p style="background-color: rgba(204,204,204,0.34);width: 80%;border-radius: 10px">示例js代码 使用Java Nashorn引擎
+          <a
+              href="https://github.com/gdpl2112/dg-script">详见仓库</a>参考模版API</p>
       </center>
       <div class="input-group">
                 <textarea style="height: 240px" id="code" class="form-control" aria-label="js 脚本"
@@ -194,7 +195,7 @@
           </samp>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="$('#modal-a').modal('hide')">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="ma0.modal('hide')">
             关闭
           </button>
         </div>
@@ -212,7 +213,9 @@ import {RouterLink} from "vue-router";
 import {onMounted} from "vue";
 import {formatMsgTime} from "@/assets/utils";
 
+let ma0: any;
 onMounted(() => {
+  ma0 = $('#modal-a') as any;
   axios.get("/api/config",).then(function (response) {
     let keys = Object.keys(response.data);
     for (let i = 0; i < keys.length; i++) {
@@ -227,7 +230,7 @@ onMounted(() => {
 
 function modify(id) {
   let key = id;
-  let value = $("#" + id).val()
+  let value: string = $("#" + id).val() as string
   if (value.indexOf("&") >= 0) value = encodeURIComponent(value)
   axios.get("/api/conf-modify?key=" + key + "&value=" + value).then(function (response) {
     alert(response.data)
@@ -236,8 +239,8 @@ function modify(id) {
   })
 }
 
-function codePost(id) {
-  let value = $("#" + id).val()
+function codePost(id: string) {
+  let value : string = $("#" + id).val() as string
   let df = new FormData()
   df.set("code", value)
   axios.post("/api/code-modify", df).then(function (response) {
@@ -252,7 +255,7 @@ function getException() {
     $("#moda-label").html("时间: " + formatMsgTime(response.data.time))
     $("#modal-body").html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
     $("#modal_body").addClass("text-danger")
-    $('#modal-a').modal('show')
+    ma0.modal('show')
   }).catch(function (err) {
     alert(err);
   })
@@ -267,7 +270,7 @@ function getLogMsg() {
     })
     $("#modal-body").html(hb)
     $("#modal_body").removeClass("text-danger")
-    $('#modal-a').modal('show')
+    ma0.modal('show')
   }).catch(function (err) {
     alert(err);
   })

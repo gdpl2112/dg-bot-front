@@ -92,9 +92,9 @@ onMounted(() => {
   })
 })
 
-let data = ref({});
+let data = ref({zoneComment: "", signGroups: "", autoLike: false, autoLikeYesterday: false, autoZoneLike: false});
 
-function modify(key: String, value: String) {
+function modify(key: String, value:  any) {
   console.log("modfiy " + key + " : " + value)
   axios.get("/api/v11/modify-conf?key=" + key + "&value=" + value).then(function (response) {
     data.value = response.data;

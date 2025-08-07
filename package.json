@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@types/jquery": "^3.5.32",
     "axios": "^1.9.0",
     "bootstrap": "^4.6.2",
     "jquery": "^3.7.1",

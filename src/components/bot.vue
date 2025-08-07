@@ -92,9 +92,9 @@ import axios from "axios";
 
 import {formatMsgTime1} from "@/assets/utils";
 
-let user = ref({t0: -1})
+let user = ref({t0: -1, expire: -1, nickname: "", qid: "", icon: ""})
 
-let count = ref({mc: 0, cc: 0, pc: 0})
+let count = ref({mc: 0, cc: 0, pc: 0, cac: 0})
 
 onMounted(() => {
 
@@ -111,7 +111,7 @@ onMounted(() => {
   })
 })
 
-function je(t) {
+function je(t: number) {
   let dateTime = new Date(t)
   let nowTime = new Date()
   if (nowTime.getTime() > dateTime.getTime()) {
@@ -124,7 +124,7 @@ function je(t) {
   }
 }
 
-function je0(t) {
+function je0(t: number) {
   let dateTime = new Date(t)
   let nowTime = new Date()
   if (nowTime.getTime() > dateTime.getTime()) {
@@ -134,7 +134,7 @@ function je0(t) {
   }
 }
 
-function ji0(t) {
+function ji0(t: number) {
   if (t <= 0) {
     return "alert alert-danger"
   } else {

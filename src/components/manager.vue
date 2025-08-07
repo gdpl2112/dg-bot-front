@@ -226,7 +226,7 @@ onMounted(() => {
   });
 
   $("#g-search").change(function () {
-    let s = $("#g-search").val()
+    let s = $(this).val()
     if (s === "") {
       glist.value = oGlist.value
     } else {
@@ -237,7 +237,7 @@ onMounted(() => {
   });
 
   $("#f-search").change(function () {
-    let s = $("#f-search").val()
+    let s = $(this).val()
     if (s === "") {
       flist.value = oFlist.value
     } else {
