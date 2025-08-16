@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import {RouterLink} from "vue-router";
-import axios from "axios";
+import axios from "@/axios_in";
 import {onMounted, ref} from 'vue'
 import router from "@/router/index.js";
 

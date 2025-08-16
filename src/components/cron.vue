@@ -170,7 +170,7 @@
 import {ref} from "vue";
 
 import $ from 'jquery'
-import axios from "axios";
+import axios from "@/axios_in";
 import router from "@/router/index.js";
 import {RouterLink} from "vue-router";
 

@@ -182,12 +182,13 @@
   </div>
   <br>
   <br>
-  <div class="modal fade" id="modal-a" tabindex="-1" aria-labelledby="moda-label" aria-hidden="true">
+  <div class="modal fade" id="modal-a" tabindex="-1" aria-labelledby="moda-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="moda-label">报错详情</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" @click="showLoging=false;"
+                  aria-label="关闭"></button>
         </div>
         <div class="modal-body text-danger" id="modal_body">
           <samp id="modal-body">
@@ -195,7 +196,8 @@
           </samp>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="ma0.modal('hide')">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                  @click="showLoging=false;ma0.modal('hide')">
             关闭
           </button>
         </div>
@@ -207,15 +209,17 @@
 
 <script setup lang="ts">
 
-import axios from "axios";
+import axios from "@/axios_in";
 import $ from 'jquery'
 import {RouterLink} from "vue-router";
 import {onMounted} from "vue";
 import {formatMsgTime} from "@/assets/utils";
 
 let ma0: any;
+let mbody: any;
 onMounted(() => {
   ma0 = $('#modal-a') as any;
+  mbody = $("#modal-body");
   axios.get("/api/config",).then(function (response) {
     let keys = Object.keys(response.data);
     for (let i = 0; i < keys.length; i++) {
@@ -240,7 +244,7 @@ function modify(id) {
 }
 
 function codePost(id: string) {
-  let value : string = $("#" + id).val() as string
+  let value: string = $("#" + id).val() as string
   let df = new FormData()
   df.set("code", value)
   axios.post("/api/code-modify", df).then(function (response) {
@@ -253,7 +257,7 @@ function codePost(id: string) {
 function getException() {
   axios.get("/api/get-exception").then(function (response) {
     $("#moda-label").html("时间: " + formatMsgTime(response.data.time))
-    $("#modal-body").html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
+    mbody.html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
     $("#modal_body").addClass("text-danger")
     ma0.modal('show')
   }).catch(function (err) {
@@ -261,15 +265,32 @@ function getException() {
   })
 }
 
+let showLoging = false
+let hb = ""
+
+setInterval(function () {
+  if (showLoging) {
+    axios.get("/api/get-log").then(function (response) {
+      response.data.forEach(function (value) {
+        hb += ("<p>" + value + "</p>")
+      })
+      mbody.html(hb)
+    })
+  }
+}, 3000);
+
 function getLogMsg() {
   axios.get("/api/get-log").then(function (response) {
+
     $("#moda-label").html("日志信息 #脚本内使用log.log(str)可打印日志")
-    var hb = ""
+
     response.data.forEach(function (value) {
       hb += ("<p>" + value + "</p>")
     })
-    $("#modal-body").html(hb)
+    mbody.html(hb)
+
     $("#modal_body").removeClass("text-danger")
+    showLoging = true
     ma0.modal('show')
   }).catch(function (err) {
     alert(err);

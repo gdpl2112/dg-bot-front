@@ -5,7 +5,7 @@ import router from "@/router";
 
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light tm-0" style="border-radius: 10px">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" @click="router.push('/')">
       <img style="opacity: 0.86;max-width: 50px; border-radius: 999px"
            class="navbar-brand" src="http://kloping.top/icon.jpg" alt="qq"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -17,10 +17,10 @@ import router from "@/router";
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">QQ代挂 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" @click="router.push('/')">首页<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://kloping.top/">kloping's</a>
+          <a class="nav-link" href="https://kloping.top/">博客</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" @click="router.push('/join')">请求帮助</a>
@@ -49,7 +49,7 @@ import router from "@/router";
   <center>
     <div style="background-color: rgba(221,221,221,0.6);width: 40%;border-radius: 33px;color: black;">
       <center>power by github@<b>kloping</b> use vue3</center>
-      <center>update time on <strong>25/08/07</strong></center>
+      <center>update time on <strong>25/08/16</strong></center>
     </div>
   </center>
   <hr>

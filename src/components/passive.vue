@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import {RouterLink} from 'vue-router'
 import {onMounted, ref} from "vue";
-import axios from "axios";
+import axios from "@/axios_in";
 import $ from 'jquery'
 
 let all = ref([])

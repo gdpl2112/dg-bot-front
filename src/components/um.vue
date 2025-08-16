@@ -6,6 +6,13 @@
   <div class="container tm-0">
     <div class="row">
       <div class="list-group col" id="main-div">
+        <hr>
+        <center>
+          <button style="width: 60%" type="button" class="btn btn-lg btn-outline-danger" v-on:click="likeNow()">
+            补充点赞
+          </button>
+        </center>
+        <hr>
         <div class="list-group-item list-group-item-action" v-for="e in list">
           <div class="input-group">
             <div class="input-group-prepend">
@@ -46,7 +53,7 @@
 
 <script setup lang="ts">
 import {onBeforeUnmount, onMounted, ref} from "vue";
-import axios from "axios";
+import axios from "@/axios_in";
 import $ from 'jquery'
 import {formatMsgTime1} from "@/assets/utils.js";
 
@@ -101,6 +108,12 @@ const handleChange1 = function (this: HTMLElement) {
     alert(err);
   })
 };
+
+function likeNow() {
+  axios.get("/api/m/autoLike").then(function (response) {
+    alert(response.data)
+  })
+}
 
 onMounted(() => {
   $(document).on('change', '.o', handleChange0);

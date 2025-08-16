@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import axios from "axios";
+import axios from "@/axios_in";
 
 import {formatMsgTime1} from "@/assets/utils";
 

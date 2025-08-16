@@ -159,7 +159,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import axios from "axios";
+import axios from "@/axios_in";
 import $ from 'jquery'
 import {RouterLink} from "vue-router";
 

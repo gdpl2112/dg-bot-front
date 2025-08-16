@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import axios from "axios";
+import axios from "@/axios_in";
 import {RouterLink} from "vue-router";
 
 let arr1 = ref([])
