@@ -270,6 +270,7 @@ let hb = ""
 
 setInterval(function () {
   if (showLoging) {
+    hb = ""
     axios.get("/api/get-log").then(function (response) {
       response.data.forEach(function (value) {
         hb += ("<p>" + value + "</p>")
@@ -284,6 +285,7 @@ function getLogMsg() {
 
     $("#moda-label").html("日志信息 #脚本内使用log.log(str)可打印日志")
 
+    hb = ""
     response.data.forEach(function (value) {
       hb += ("<p>" + value + "</p>")
     })
