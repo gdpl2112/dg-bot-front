@@ -86,7 +86,7 @@ function add() {
   let inp2 = $("#pas-out");
   let t0 = inp1.val()
   let t1 = inp2.val()
-  axios.get("/api/p-add?t0=" + t0 + "&t1=" + t1).then(function (response) {
+  axios.post("/api/p-add", {t0: t0, t1: t1}).then(function (response) {
     all.value = response.data;
     inp2.val("")
   }).catch(function (err) {
@@ -95,7 +95,7 @@ function add() {
 }
 
 function del(touch, o) {
-  axios.post("/api/p-del",{touch: touch, out: o} ).then(function (response) {
+  axios.post("/api/p-del", {touch: touch, out: o}).then(function (response) {
     if (response.data === true) {
       if (o !== null) {
         all.value = all.value.filter(function (item) {
