@@ -341,7 +341,7 @@ function gm3(tid) {
   axios.get("/api/gc3?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e) => {
-        if (e.tid === tid) e.k2 = !e.k2;
+        if (e.tid === tid) e.k3 = !e.k3;
       })
     }
   }).catch(function (err) {
