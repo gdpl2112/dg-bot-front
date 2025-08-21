@@ -75,11 +75,12 @@
           <!--群-->
           <div id="g-div" style="display: none;">
             <p style="background-color: rgba(211,211,211,0.8)">
-              从左至右按钮分别是 控制开关
-              <span style="color: #67f327">被动回复</span>&nbsp;
+              从 左至右 上到下 按钮分别是
               <span style="color: #2e8f00">API调用</span>&nbsp;
-              <span style="color: #184c00">撤回监听</span>
-              #红色代表已关闭 默认开启
+              <span style="color: #184c00">撤回监听</span>&nbsp;
+              <span style="color: #f1b1f1">被动回复</span>&nbsp;
+              <span style="color: #279ef3">内置功能</span>&nbsp;
+              的控制开关 #红色代表已关闭 默认开启
             </p>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -95,17 +96,26 @@
                   <center><img :src="e.icon" class="card-img-top" alt="头像" style="width: 74%;border-radius: 999px">
                   </center>
                   <center><p>{{ e.name }}</p></center>
-                  <div class="align-content-center">
-                    <button v-on:click="gm2(e.tid)" type="button" title="对象被动回复开关"
-                            :class="'ml-2 mb-1 btn btn-outline-'+(e.k2?'success':'danger')">{{ (e.k2 ? '开' : '关') }}
-                    </button>
-                    <button v-on:click="gm0(e.tid)" type="button" title="API调用开关"
-                            :class="'ml-1 mb-1 btn btn-outline-'+(e.k0?'success':'danger')">{{ (e.k0 ? '开' : '关') }}
-                    </button>
-                    <button v-on:click="gm1(e.tid)" type="button"
-                            title="对象监听开关"
-                            :class="'ml-1 mb-1 btn btn-outline-'+(e.k1?'success':'danger')">{{ (e.k1 ? '开' : '关') }}
-                    </button>
+                  <div class="align-content-center justify-content-center items-center">
+                    <div style="width: 100%" class="btn-group" role="group" aria-label="控制开关">
+                      <button v-on:click="gm0(e.tid)" type="button" title="API调用开关"
+                              :class="'btn btn-outline-'+(e.k0?'success':'danger')">{{ (e.k0 ? '开' : '关') }}
+                      </button>
+                      <button v-on:click="gm1(e.tid)" type="button"
+                              title="对象监听开关"
+                              :class="'btn btn-outline-'+(e.k1?'success':'danger')">{{ (e.k1 ? '开' : '关') }}
+                      </button>
+                    </div>
+                    <div style="width: 100%;border-radius: 15px" class="btn-group mb-1" role="group"
+                         aria-label="控制开关">
+                      <button v-on:click="gm2(e.tid)" type="button" title="对象被动回复开关"
+                              :class="'btn btn-outline-'+(e.k2?'success':'danger')">{{ (e.k2 ? '开' : '关') }}
+                      </button>
+                      <button v-on:click="gm3(e.tid)" type="button" title="内置功能开关"
+                              :class="'btn btn-outline-'+(e.k3?'success':'danger')">{{ (e.k3 ? '开' : '关') }}
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -114,11 +124,12 @@
           <!--好友-->
           <div id="f-div" style="display: none;">
             <p style="background-color: rgba(211,211,211,0.8)">
-              从左至右按钮分别是 控制开关
-              <span style="color: #67f327">被动回复</span>&nbsp;
+              从 左至右 上到下 按钮分别是
               <span style="color: #2e8f00">API调用</span>&nbsp;
-              <span style="color: #184c00">撤回监听</span>
-              #红色代表已关闭 默认开启
+              <span style="color: #184c00">撤回监听</span>&nbsp;
+              <span style="color: #f1b1f1">被动回复</span>&nbsp;
+              <span style="color: #279ef3">内置功能</span>&nbsp;
+              的控制开关 #红色代表已关闭 默认开启
             </p>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -134,16 +145,26 @@
                   <center><img :src="e.icon" class="card-img-top" alt="头像" style="width: 74%;border-radius: 999px">
                   </center>
                   <center><p>{{ e.name }}</p></center>
-                  <div class="align-content-center">
-                    <button v-on:click="gm2(e.tid)" type="button" title="对象被动回复开关"
-                            :class="'ml-2 mb-1 btn btn-outline-'+(e.k2?'success':'danger')">{{ (e.k2 ? '开' : '关') }}
-                    </button>
-                    <button v-on:click="gm0(e.tid)" type="button" title="API调用开关"
-                            :class="'ml-1 mb-1 btn btn-outline-'+(e.k0?'success':'danger')">{{ (e.k0 ? '开' : '关') }}
-                    </button>
-                    <button v-on:click="gm1(e.tid)" type="button" title="对象监听开关"
-                            :class="'ml-1 mb-1 btn btn-outline-'+(e.k1?'success':'danger')">{{ (e.k1 ? '开' : '关') }}
-                    </button>
+                  <div class="align-content-center justify-content-center items-center">
+                    <div style="width: 100%" class="btn-group" role="group" aria-label="控制开关">
+                      <button v-on:click="gm0(e.tid)" type="button" title="API调用开关"
+                              :class="'btn btn-outline-'+(e.k0?'success':'danger')">{{ (e.k0 ? '开' : '关') }}
+                      </button>
+                      <button v-on:click="gm1(e.tid)" type="button"
+                              title="对象监听开关"
+                              :class="'btn btn-outline-'+(e.k1?'success':'danger')">{{ (e.k1 ? '开' : '关') }}
+                      </button>
+                    </div>
+                    <div style="width: 100%;border-radius: 15px" class="btn-group mb-1" role="group"
+                         aria-label="控制开关">
+                      <button v-on:click="gm2(e.tid)" type="button" title="对象被动回复开关"
+                              :class="'btn btn-outline-'+(e.k2?'success':'danger')">{{ (e.k2 ? '开' : '关') }}
+                      </button>
+                      <button v-on:click="gm3(e.tid)" type="button" title="内置功能开关"
+                              :class="'btn btn-outline-'+(e.k3?'success':'danger')">{{ (e.k3 ? '开' : '关') }}
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -306,6 +327,18 @@ function gm1(tid) {
 
 function gm2(tid) {
   axios.get("/api/gc2?tid=" + tid).then(function (response) {
+    if (response.data === true) {
+      glist.value.forEach((e) => {
+        if (e.tid === tid) e.k2 = !e.k2;
+      })
+    }
+  }).catch(function (err) {
+    alert(err);
+  })
+}
+
+function gm3(tid) {
+  axios.get("/api/gc3?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e) => {
         if (e.tid === tid) e.k2 = !e.k2;
