@@ -25,33 +25,33 @@
               </label>
               <div class="alert alert-secondary" role="alert">
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week1" value="1">
+                  <input name="week" class="form-check-input" type="checkbox" id="week1" value="2">
                   <label class="form-check-label" for="week1">星期一</label>
                 </div>&nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week2" value="2">
+                  <input name="week" class="form-check-input" type="checkbox" id="week2" value="3">
                   <label class="form-check-label" for="week2">星期二</label>
                 </div>&nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week3" value="3">
+                  <input name="week" class="form-check-input" type="checkbox" id="week3" value="4">
                   <label class="form-check-label" for="week3">星期三</label>
                 </div> &nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week4" value="4">
+                  <input name="week" class="form-check-input" type="checkbox" id="week4" value="5">
                   <label class="form-check-label" for="week4">星期四</label>
                 </div> &nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week5" value="5">
+                  <input name="week" class="form-check-input" type="checkbox" id="week5" value="6">
                   <label class="form-check-label" for="week5">星期五</label>
                 </div>
                 &nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week6" value="6">
+                  <input name="week" class="form-check-input" type="checkbox" id="week6" value="7">
                   <label class="form-check-label" for="week6">星期六</label>
                 </div>
                 &nbsp;
                 <div class="form-check form-check-inline">
-                  <input name="week" class="form-check-input" type="checkbox" id="week7" value="7">
+                  <input name="week" class="form-check-input" type="checkbox" id="week7" value="1">
                   <label class="form-check-label" for="week7">星期日</label>
                 </div>
               </div>
