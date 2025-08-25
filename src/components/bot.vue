@@ -53,10 +53,10 @@
                   <span class="input-group-text">授权码</span>
                 </div>
                 <input type="text" id="auth_input0" class="form-control" placeholder="点击获取后修改"
-                       aria-describedby="auth_but"
-                       :value="abit">
+                       aria-describedby="auth_but">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" @click="authBut0()" id="auth_but">{{ abt }}
+                  <button class="btn btn-outline-secondary" type="button" @click="authBut0()" id="auth_but">
+                    {{ (abit == null || abit == "") ? "获取" : "修改" }}
                   </button>
                 </div>
               </div>
@@ -77,7 +77,7 @@
             </div> &nbsp;&nbsp;
 
             <div class="alert alert-warning" role="alert">
-              被动消息数: {{ count.pc }} &nbsp;
+              回复词数: {{ count.pc }} &nbsp;
               <RouterLink to="/passive" type="button" class="btn btn-warning">管理</RouterLink>
             </div>
 
@@ -128,6 +128,10 @@ onMounted(() => {
   axios.get('/api/statistics').then(response => {
     count.value = response.data
   })
+  ainp0 = $("#auth_input0");
+  ainp0.on("change", function () {
+    abit.value = ainp0.val()
+  })
 })
 
 function je(t: number) {
@@ -161,19 +165,19 @@ function ji0(t: number) {
   }
 }
 
-// 授权码按钮文字
-let abt = ref("获取")
-// 授权码输入框值
-let abit = ref("")
 
-async function authBut0() {
-  abit.value = $("#auth_input0").val() as string
+let abit = ref("")
+// 授权码按钮文字
+let ainp0: any
+
+function authBut0() {
   if (abit.value == "") {
-    await axios.get('/api/cpwd').then(response => {
+    axios.get('/api/cpwd').then(response => {
+      ainp0.val(response.data)
       abit.value = response.data
     })
   } else {
-    await axios.post('/api/mpwd/', {"pwd": abit.value}).then(response => {
+    axios.post('/api/mpwd/', {"pwd": abit.value}).then(response => {
       if (response.data == "ok") {
         alert("修改成功")
       } else {
@@ -181,10 +185,6 @@ async function authBut0() {
       }
     })
   }
-  if (abt.value != "") {
-    abt.value = "修改"
-  }
-
 }
 
 </script>
