@@ -47,7 +47,7 @@ import router from "@/router";
   <br>
   <hr>
   <center>
-    <div style="background-color: rgba(221,221,221,0.6);width: 40%;border-radius: 33px;color: black;">
+    <div id="footer0">
       <center>power by github@<b>kloping</b> use vue3</center>
       <center>update time on <strong>25/08/25</strong></center>
     </div>
@@ -57,5 +57,10 @@ import router from "@/router";
 </template>
 
 <style scoped>
-
+#footer0 {
+  background-color: rgba(221, 221, 221, 0.6);
+  width: 40%;
+  border-radius: 33px;
+  color: black;
+}
 </style>

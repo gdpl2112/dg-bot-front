@@ -166,7 +166,7 @@ let abt = ref("获取")
 let abit = ref("")
 
 async function authBut0() {
-  abit.value = $("#auth_input0").val()
+  abit.value = $("#auth_input0").val() as string
   if (abit.value == "") {
     await axios.get('/api/cpwd').then(response => {
       abit.value = response.data
