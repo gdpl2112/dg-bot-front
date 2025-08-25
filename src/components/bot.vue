@@ -41,9 +41,27 @@
           </div>
           <br>
           <hr>
-          <div class="alert alert-info" role="alert">
-            <RouterLink to="/conf" type="button" class="btn btn-outline-info">配置中心</RouterLink>
-          </div>
+          <center>
+            <div class="alert alert-info" style="width: 60% ;background-color: rgba(220,210,253,0.78)" role="alert">
+              <RouterLink to="/conf" type="button" class="btn btn-outline-info">配置中心</RouterLink>
+              <br>
+              <hr>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">授权码</span>
+                </div>
+                <input type="text" id="auth_input0" class="form-control" placeholder="点击获取后修改"
+                       aria-describedby="auth_but"
+                       :value="abit">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" @click="authBut0()" id="auth_but">{{ abt }}
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </center>
           <hr>
           <div class="input-group form-inline">
 
@@ -89,7 +107,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "@/axios_in";
-
+import $ from 'jquery'
 import {formatMsgTime1} from "@/assets/utils";
 
 let user = ref({t0: -1, expire: -1, nickname: "", qid: "", icon: ""})
@@ -140,6 +158,32 @@ function ji0(t: number) {
   } else {
     return "alert alert-success"
   }
+}
+
+// 授权码按钮文字
+let abt = ref("获取")
+// 授权码输入框值
+let abit = ref("")
+
+async function authBut0() {
+  abit.value = $("#auth_input0").val()
+  if (abit.value == "") {
+    await axios.get('/api/cpwd').then(response => {
+      abit.value = response.data
+    })
+  } else {
+    await axios.post('/api/mpwd/', {"pwd": abit.value}).then(response => {
+      if (response.data == "ok") {
+        alert("修改成功")
+      } else {
+        alert(response.data)
+      }
+    })
+  }
+  if (abt.value != "") {
+    abt.value = "修改"
+  }
+
 }
 
 </script>

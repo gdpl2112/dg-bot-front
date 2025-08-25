@@ -1,5 +1,10 @@
 <style>
-
+#main {
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.73);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 </style>
 
 <template>
@@ -8,9 +13,9 @@
     </RouterLink>
   </center>
   <hr>
-  <center style="color: rgba(33,151,252,0.95);"><h1> Bot代挂 配置中心 </h1></center>
   <div class="container" id="main">
-    <div class="">
+    <center style="color: rgba(33,151,252,0.95);"><h1> Bot代挂 配置中心 </h1></center>
+    <div class="" style="margin-top: 15px">
       <div class="row">
         <div class="input-group col-sm mb-3">
           <label for="cd0">
@@ -74,9 +79,9 @@
           </div>
         </div>
       </div>
+      <small class="form-text text-muted">纯数字为好友f(id);g(id)为群聊;找不到时则发到自己bot</small>
       <div class="row">
-        <small class="form-text text-muted">纯数字为好友f(id);g(id)为群聊;找不到时则发到自己bot</small>
-        <div class="input-group col-sm  mb-3">
+        <div class="input-group col-sm mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text">监听发送到:</span>
           </div>
@@ -101,7 +106,7 @@
       <div class="row">
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">回复添加:</span>
+            <span class="input-group-text">添词:</span>
           </div>
           <input id="add0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
@@ -110,7 +115,7 @@
         </div>
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">取消添加回复:</span>
+            <span class="input-group-text">添加时取消:</span>
           </div>
           <input id="cancel0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
@@ -120,7 +125,7 @@
         </div>
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">查询回复:</span>
+            <span class="input-group-text">查词:</span>
           </div>
           <input id="select0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
@@ -130,7 +135,7 @@
         </div>
         <div class="input-group col-sm  mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">删词关键词:</span>
+            <span class="input-group-text">删词:</span>
           </div>
           <input id="del0" type="text" class="form-control" aria-label="">
           <div class="input-group-append">
@@ -182,7 +187,8 @@
   </div>
   <br>
   <br>
-  <div class="modal fade" id="modal-a" tabindex="-1" aria-labelledby="moda-label" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal fade" id="modal-a" tabindex="-1" aria-labelledby="moda-label" aria-hidden="true"
+       data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header">
