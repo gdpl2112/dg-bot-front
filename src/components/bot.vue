@@ -6,8 +6,9 @@
   <center style="color: rgba(255,79,152,0.97);"><h1> Bot代挂信息 个人中心 </h1></center>
   <div class="container" style="margin-top: 45px">
     <div class="row" style="margin-bottom: 25px;">
-      <div class="col-2"></div>
-      <div style="border-radius: 25px;background-color: rgba(86,117,105,0.4);text-align: center;" class="col-8">
+      <div class="col-1 col-md-2"></div>
+      <div class="col-10 col-md-8"
+           style="border-radius: 25px;background-color: rgba(86,117,105,0.4);text-align: center;">
         <br>
         <img style="max-width: 75px" :src="user.icon" alt="icon">
         <br>

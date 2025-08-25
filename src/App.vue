@@ -59,7 +59,7 @@ import router from "@/router";
 <style scoped>
 #footer0 {
   background-color: rgba(221, 221, 221, 0.6);
-  width: 60%;
+  width: 70%;
   border-radius: 33px;
   color: black;
 }
