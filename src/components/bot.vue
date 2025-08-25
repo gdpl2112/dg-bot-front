@@ -42,7 +42,7 @@
           <br>
           <hr>
           <center>
-            <div class="alert alert-info" style="width: 60% ;background-color: rgba(220,210,253,0.78)" role="alert">
+            <div class="alert alert-info" style="background-color: rgba(220,210,253,0.78)" role="alert">
               <RouterLink to="/conf" type="button" class="btn btn-outline-info">配置中心</RouterLink>
               <br>
               <hr>
