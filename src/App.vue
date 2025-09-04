@@ -16,14 +16,20 @@ import router from "@/router";
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" @click="router.push('/')">首页<span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+          <button class="nav-link btn-sm btn-outline-primary" type="button" @click="router.push('/')">首页
+          </button>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://kloping.top/">博客</a>
+          <button class="nav-link btn-sm btn-outline-success" type="button" @click="router.push('/bot')">个人信息
+          </button>
         </li>
         <li class="nav-item">
-          <a class="nav-link" @click="router.push('/join')">请求帮助</a>
+          <a class="nav-link btn-sm btn-outline-warning" type="button" href="https://kloping.top/">博客</a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn-sm btn-outline-info" type="button" @click="router.push('/join')">请求帮助
+          </button>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled">更多功能;敬请期待.</a>
@@ -49,7 +55,7 @@ import router from "@/router";
   <center>
     <div id="footer0">
       <center>power by github@<b>kloping</b> use vue3</center>
-      <center>update time on <strong>25/08/25</strong></center>
+      <center>update time on <strong>25/09/04</strong></center>
     </div>
   </center>
   <hr>
@@ -63,4 +69,9 @@ import router from "@/router";
   border-radius: 33px;
   color: black;
 }
+
+.nav-item *{
+  border-radius: 11px;
+}
+
 </style>

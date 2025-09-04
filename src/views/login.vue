@@ -55,7 +55,15 @@
       </p>
     </div>
   </div>
-
+  <div class="container tm-0">
+    <div class="row">
+      <div class="col align-self-center">
+        <RouterLink to="/join" type="button" class="btn btn-lg btn-block btn-outline-success">现在开始
+        </RouterLink>
+      </div>
+    </div>
+  </div>
+  <br>
   <center>
     <RouterLink style="width: 50%" to="/" type="button" class="btn btn-lg btn-block btn-outline-success">返回主页
     </RouterLink>

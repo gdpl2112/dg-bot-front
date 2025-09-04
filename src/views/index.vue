@@ -35,7 +35,7 @@
   <div class="container tm-0">
     <div class="row">
       <div class="col align-self-center">
-        <RouterLink to="/login" type="button" class="btn btn-lg btn-block btn-outline-success">个人信息</RouterLink>
+        <RouterLink to="/login" type="button" class="btn btn-lg btn-block btn-outline-success">登录页面</RouterLink>
       </div>
     </div>
   </div>
