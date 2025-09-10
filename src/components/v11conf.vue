@@ -222,6 +222,7 @@ function loadSignGroups() {
 let data = ref(
     {
       zoneComment: "",
+      zoneWalks: "",
       signGroups: "",
       likeBlack: "",
       likeWhite: "",
