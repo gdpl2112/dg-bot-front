@@ -106,6 +106,12 @@
             <button v-on:click="modify('zoneComment',$('#zctt').val())" type="button"
                     :class="'btn mb-3 btn-outline-primary'" style="margin-top: 14px"> 应用设置
             </button>
+            <hr>
+            <label for="zcwk" class="form-label">自动空间访问</label>
+            <textarea class="form-control" id="zcwk" rows="3" placeholder="要访问的QQ号以;分割">{{data.zoneWalks}}</textarea>
+            <button v-on:click="modify('zoneWalks',$('#zcwk').val())" type="button"
+                    :class="'btn mb-3 btn-outline-primary'" style="margin-top: 14px"> 应用设置
+            </button>
           </div>
         </form>
       </div>
