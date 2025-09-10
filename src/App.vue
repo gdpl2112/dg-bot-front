@@ -55,7 +55,7 @@ import router from "@/router";
   <center>
     <div id="footer0">
       <center>power by github@<b>kloping</b> use vue3</center>
-      <center>update time on <strong>25/09/04</strong></center>
+      <center>update time on <strong>25/09/10</strong></center>
     </div>
   </center>
   <hr>
