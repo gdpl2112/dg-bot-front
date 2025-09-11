@@ -1,5 +1,4 @@
 <style>
-
 </style>
 
 <template>
@@ -95,7 +94,7 @@
       <div class="col-12 col-md-12 alert justify-content-center text-center">
         <form class="row justify-content-center">
           <div class="alert alert-secondary justify-content-center" role="alert" style="border-radius: 15px">
-            <center>空间自动点赞 #尚未实现</center>
+            <center>空间自动点赞</center>
             <button v-on:click="modify('autoZoneLike',!data.autoZoneLike)" type="button"
                     :class="'btn mb-3 btn-'+(data.autoZoneLike?'success':'danger' )" style="margin-top: 14px">
               {{ (data.autoZoneLike ? '当前开启' : '当前关闭') }}
@@ -106,9 +105,13 @@
             <button v-on:click="modify('zoneComment',$('#zctt').val())" type="button"
                     :class="'btn mb-3 btn-outline-primary'" style="margin-top: 14px"> 应用设置
             </button>
+            <button v-on:click="($('#zoneEvl-modal') as any).modal('show')" type="button"
+                    :class="'btn mb-3 btn-outline-success'" style="margin-top: 14px"> 频率设置
+            </button>
             <hr>
             <label for="zcwk" class="form-label">自动空间访问</label>
-            <textarea class="form-control" id="zcwk" rows="3" placeholder="要访问的QQ号以;分割">{{data.zoneWalks}}</textarea>
+            <textarea class="form-control" id="zcwk" rows="3"
+                      placeholder="要访问的QQ号以;分割">{{data.zoneWalks}}</textarea>
             <button v-on:click="modify('zoneWalks',$('#zcwk').val())" type="button"
                     :class="'btn mb-3 btn-outline-primary'" style="margin-top: 14px"> 应用设置
             </button>
@@ -161,6 +164,44 @@
       </div>
     </div>
   </div>
+
+  <div id="zoneEvl-modal" class="modal fade " tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">空间访问频率设置</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+        </div>
+        <div class="modal-body" id="gsign-body">
+          <small class="form-text text-muted">空间访问频率设置 1-10 单位: 分钟</small>
+          <small class="form-text text-muted">频率越快 评论(点赞)越及时 反之亦然</small>
+          <small class="form-text text-muted">提示,若设置频率过快可能导致被检测有封号风险</small>
+          当前空间查询频率: {{data.zoneEvl}} 分钟/次 <br>
+          <hr>
+          <button v-on:click="modify('zoneEvl',1);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(255,45,12,0.65);">1</button>
+          <button v-on:click="modify('zoneEvl',2);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(255,104,82,0.65)">2</button>
+          <button v-on:click="modify('zoneEvl',3);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(251,159,31,0.65)">3</button>
+          <button v-on:click="modify('zoneEvl',4);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(255,186,82,0.65)">4</button>
+          <button v-on:click="modify('zoneEvl',5);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(140,82,255,0.65)">5</button>
+          <button v-on:click="modify('zoneEvl',6);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(151,130,244,0.65)">6</button>
+          <br>
+          <button v-on:click="modify('zoneEvl',7);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(41,250,250,0.65)">7</button>
+          <button v-on:click="modify('zoneEvl',8);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(36,250,194,0.65)">8</button>
+          <button v-on:click="modify('zoneEvl',9);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(56,237,135,0.65)">9</button>
+          <button v-on:click="modify('zoneEvl',10);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(128,239,163,0.65)">10</button>
+          <button v-on:click="modify('zoneEvl',20);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(178,255,202,0.65)">20</button>
+          <button v-on:click="modify('zoneEvl',30);" data-dismiss="modal" type="button" class="btn" style="margin: 1px;background-color: rgba(207,225,177,0.65)">30</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">
@@ -221,6 +262,7 @@ function loadSignGroups() {
 
 let data = ref(
     {
+      zoneEvl: 10,
       zoneComment: "",
       zoneWalks: "",
       signGroups: "",
