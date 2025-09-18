@@ -17,6 +17,11 @@
   <div class="tm-1 jumbotron jumbotron-fluid">
 
     <div class="container">
+      <span>截止目前(自2025/09/18计数): 已经处理消息总数为
+        <span style="color: #ff0099;font-weight: bold">{{ statistics.all }}</span>条&nbsp;&nbsp;其中
+        <span style="color: #1ae2ff;font-weight: bold">{{ statistics.group }}</span>条群消息&nbsp;&nbsp;
+        <span style="color: #c17600;font-weight: bold">{{ statistics.private }}</span>条私聊消息
+      </span>
       <h3 class="display-6">已登录的 Bot 列表</h3>
       <div id="bot-list" class="row">
         <!-- 动态加载的 Bot 列表 -->
@@ -79,12 +84,18 @@ import router from "@/router/index.js";
 
 let loading = ref(true)
 let botData = ref([{online: false, nick: '', avatar: '', id: 0}])
+let statistics = ref({group: 0, private: 0, all: 0})
 onMounted(() => {
   fetch('/api/bot/list')
       .then(response => response.json())
       .then(bots => {
         botData.value = bots;
         loading.value = false;
+      });
+  fetch('/api/pre/statistics')
+      .then(response => response.json())
+      .then(data => {
+        statistics.value = data
       });
 })
 
