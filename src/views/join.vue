@@ -25,7 +25,7 @@
         <img src="/img/sm-card1.png" class="card-img-top" style="margin-top: 15px" alt="">
         <div class="card-body">
           <h5 class="card-title">进群询问</h5>
-          <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Tuzi4oqX0tlE4ZSNA63XF5m8tF6jzmkD&authKey=8Y8gls5ocqYex0If27cIVHDIwfNR%2B5Mg%2FKtAaerxG92oaym6TyC5RYBZoa2G0ft2&noverify=0&group_code=278681553"
+          <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=hzQV6YQPXEKqRG1RPtwi7w77wFXltgufoFjv%2FsTFBh0oF04fdyPhkIcMWL3moUWL&busi_data=eyJncm91cENvZGUiOiI5NDM2NDgxNTEiLCJ0b2tlbiI6Ii8wbWNyTGxHOTQrMFRnL2hUVGRNck1FY2JubGlibDVlazQ4ZlUydU1neUEyMElUeTlLbG4wdzk0ckF5SndVRUkiLCJ1aW4iOiIzNDc0MDA2NzY2In0%3D&data=7GizNYlpH7SkzukK4s_FJfW1GLh0PywGGiMyOg-Bq8934xajZhEh6vYD8VpwcNMNerw4zX7F1o8QZLDe0R9ZYA&svctype=4&tempid=h5_group_info"
              class="btn btn-primary">现在去</a>
         </div>
       </div>
