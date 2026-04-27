@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import path from "path";
 
-let baseUrl = 'http://117.72.74.145:34740/'
+let baseUrl = 'http://127.0.0.1:34740/'
 // let baseUrl = 'http://192.168.1.11:34740/'
 // https://vite.dev/config/
 export default defineConfig({
