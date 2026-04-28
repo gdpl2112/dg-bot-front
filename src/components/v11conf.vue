@@ -75,7 +75,6 @@
 </style>
 
 <template>
-  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
 
   <div class="page-card">
     <h1 class="page-title">V11配置</h1>

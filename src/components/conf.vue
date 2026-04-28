@@ -49,7 +49,6 @@
 </style>
 
 <template>
-  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
 
   <div class="page-card">
     <h1 class="page-title" style="color: rgba(37,99,235,0.95);">Bot代挂 · 配置中心</h1>

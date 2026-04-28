@@ -6,17 +6,20 @@
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(15, 23, 42, 0.06);
 }
+
 .cron-section-title {
   font-weight: 700;
   font-size: 0.92rem;
   color: #0f172a;
   margin-bottom: 0.5rem;
 }
+
 .week-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
+
 .week-btn {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
@@ -28,16 +31,19 @@
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .week-btn-selected {
   background: rgba(37, 99, 235, 0.12);
   border-color: rgba(37, 99, 235, 0.3);
   color: #2563eb;
 }
+
 .type-toggle {
   display: flex;
   gap: 0.35rem;
   margin-bottom: 0.5rem;
 }
+
 .type-btn {
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
@@ -49,20 +55,24 @@
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .type-btn-active {
   background: rgba(37, 99, 235, 0.12);
   border-color: rgba(37, 99, 235, 0.3);
   color: #2563eb;
 }
+
 .select-row {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+
 .select-card {
   flex: 1;
   min-width: 100px;
 }
+
 .select-card select {
   width: 100%;
   border: 1px solid rgba(15, 23, 42, 0.12);
@@ -72,16 +82,20 @@
   background: rgba(255, 255, 255, 0.9);
   outline: none;
 }
+
 .target-row {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-.target-row .input-card { flex: 1; min-width: 140px; }
+
+.target-row .input-card {
+  flex: 1;
+  min-width: 140px;
+}
 </style>
 
 <template>
-  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
   <RouterLink to="/cron-list" class="back-link">← 返回定时任务</RouterLink>
 
   <div class="page-card">
@@ -90,24 +104,32 @@
     <!-- 日期类型选择 -->
     <div class="cron-section">
       <div class="type-toggle">
-        <button :class="['type-btn', dateType === 'week' ? 'type-btn-active' : '']" @click="dateType='week'">星期模式</button>
-        <button :class="['type-btn', dateType === 'month-day' ? 'type-btn-active' : '']" @click="dateType='month-day'">月/日模式</button>
+        <button :class="['type-btn', dateType === 'week' ? 'type-btn-active' : '']" @click="dateType='week'">星期模式
+        </button>
+        <button :class="['type-btn', dateType === 'month-day' ? 'type-btn-active' : '']" @click="dateType='month-day'">
+          月/日模式
+        </button>
       </div>
 
       <!-- 星期选择 -->
       <div v-if="dateType === 'week'" class="week-grid">
         <button v-for="w in weekOptions" :key="w.value"
                 :class="['week-btn', selectedWeeks.includes(w.value) ? 'week-btn-selected' : '']"
-                @click="toggleWeek(w.value)">{{ w.label }}</button>
+                @click="toggleWeek(w.value)">{{ w.label }}
+        </button>
       </div>
 
       <!-- 月/日选择 -->
       <div v-if="dateType === 'month-day'">
         <div class="type-toggle">
-          <button :class="['type-btn', monthMode === 'eve' ? 'type-btn-active' : '']" @click="monthMode='eve'">每月</button>
-          <button :class="['type-btn', monthMode === 'point' ? 'type-btn-active' : '']" @click="monthMode='point'">指定月</button>
+          <button :class="['type-btn', monthMode === 'eve' ? 'type-btn-active' : '']" @click="monthMode='eve'">每月
+          </button>
+          <button :class="['type-btn', monthMode === 'point' ? 'type-btn-active' : '']" @click="monthMode='point'">
+            指定月
+          </button>
           <button :class="['type-btn', dayMode === 'eve' ? 'type-btn-active' : '']" @click="dayMode='eve'">每日</button>
-          <button :class="['type-btn', dayMode === 'point' ? 'type-btn-active' : '']" @click="dayMode='point'">指定日</button>
+          <button :class="['type-btn', dayMode === 'point' ? 'type-btn-active' : '']" @click="dayMode='point'">指定日
+          </button>
         </div>
         <div class="select-row">
           <div v-if="monthMode === 'point'" class="select-card">
@@ -146,7 +168,8 @@
       <div class="cron-section-title">信息补充</div>
       <div class="target-row">
         <div class="input-card">
-          <select v-model="tidType" style="border:0;background:transparent;padding:0.4rem 0.65rem;font-size:0.88rem;outline:none">
+          <select v-model="tidType"
+                  style="border:0;background:transparent;padding:0.4rem 0.65rem;font-size:0.88rem;outline:none">
             <option value="f">好友</option>
             <option value="g">群</option>
           </select>
