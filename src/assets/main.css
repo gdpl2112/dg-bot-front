@@ -356,3 +356,18 @@ hr {
     padding: 0.85rem 1.25rem;
     border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
+
+/* ========== 后台管理布局样式 ========== */
+body.admin-body {
+    background-color: rgba(241, 245, 249, 0.85);
+}
+
+/* 管理布局下 page-card 适配 */
+.admin-content .page-card {
+    max-width: 100%;
+}
+
+/* 管理布局下 back-link 适配 */
+.admin-content .back-link {
+    margin: 0 0 1rem;
+}

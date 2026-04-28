@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {RouterView, useRoute} from 'vue-router'
 import router from "@/router";
-import {ref} from "vue";
+import {ref, computed} from "vue";
 
 /** 导航栏菜单项配置 */
 const navItems = [
@@ -17,6 +17,14 @@ const navExpanded = ref(false)
 
 /** 当前路由信息，用于高亮当前页面对应的导航项 */
 const currentRoute = useRoute()
+
+/**
+ * 判断当前是否为后台管理页面
+ * 管理页面使用 AdminLayout 自带布局，不显示公开导航栏和页脚
+ */
+const isAdminPage = computed(() => {
+  return currentRoute.matched.some(record => record.meta.admin)
+})
 
 /**
  * 判断菜单项是否与当前路由匹配
@@ -38,55 +46,61 @@ function pushRoute(route: string) {
 </script>
 
 <template>
-  <nav class="app-navbar">
-    <div class="nav-header">
-      <button class="brand-button" type="button" aria-label="返回首页" @click="pushRoute('/')">
-        <img class="nav-logo" src="http://kloping.top/icon.jpg" alt="qq">
-        <span class="brand-text">Q云端代挂</span>
-      </button>
-      <button class="navbar-toggler" type="button" :aria-expanded="navExpanded"
-              aria-controls="navbarSupportedContent" aria-label="Toggle navigation"
-              @click="navExpanded = !navExpanded">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-
-    <div class="navbar-collapse" :class="{ show: navExpanded }" id="navbarSupportedContent">
-      <ul class="navbar-nav">
-        <li class="nav-item" v-for="item in navItems" :key="item.label">
-          <button v-if="item.route" class="nav-btn"
-                  :class="isRouteActive(item.route) ? 'nav-btn-active' : 'nav-btn-default'"
-                  type="button" @click="pushRoute(item.route)">
-            {{ item.label }}
-          </button>
-          <a v-else-if="item.href" class="nav-btn nav-btn-default"
-             :href="item.href" target="_blank" rel="noreferrer" @click="navExpanded = false">
-            {{ item.label }}
-          </a>
-          <span v-else class="nav-disabled">{{ item.label }}</span>
-        </li>
-      </ul>
-      <div class="nav-github">
-        <a class="github-link" target="_blank" rel="noreferrer" href="https://github.com/gdpl2112/dg-bot"
-           @click="navExpanded = false">
-          <img class="github-icon" alt="github" loading="lazy"
-               src="https://s.nmxc.ltd/sakurairo_vision/@2.6/display_icon/sora/github.png">
-          <span>GitHub 开源地址</span>
-        </a>
+  <!-- 公开页面布局：顶部导航栏 + 内容 + 页脚 -->
+  <template v-if="!isAdminPage">
+    <nav class="app-navbar">
+      <div class="nav-header">
+        <button class="brand-button" type="button" aria-label="返回首页" @click="pushRoute('/')">
+          <img class="nav-logo" src="http://kloping.top/icon.jpg" alt="qq">
+          <span class="brand-text">Q云端代挂</span>
+        </button>
+        <button class="navbar-toggler" type="button" :aria-expanded="navExpanded"
+                aria-controls="navbarSupportedContent" aria-label="Toggle navigation"
+                @click="navExpanded = !navExpanded">
+          <span class="navbar-toggler-icon"></span>
+        </button>
       </div>
-    </div>
-  </nav>
 
-  <main class="app-main">
-    <RouterView/>
-  </main>
+      <div class="navbar-collapse" :class="{ show: navExpanded }" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item" v-for="item in navItems" :key="item.label">
+            <button v-if="item.route" class="nav-btn"
+                    :class="isRouteActive(item.route) ? 'nav-btn-active' : 'nav-btn-default'"
+                    type="button" @click="pushRoute(item.route)">
+              {{ item.label }}
+            </button>
+            <a v-else-if="item.href" class="nav-btn nav-btn-default"
+               :href="item.href" target="_blank" rel="noreferrer" @click="navExpanded = false">
+              {{ item.label }}
+            </a>
+            <span v-else class="nav-disabled">{{ item.label }}</span>
+          </li>
+        </ul>
+        <div class="nav-github">
+          <a class="github-link" target="_blank" rel="noreferrer" href="https://github.com/gdpl2112/dg-bot"
+             @click="navExpanded = false">
+            <img class="github-icon" alt="github" loading="lazy"
+                 src="https://s.nmxc.ltd/sakurairo_vision/@2.6/display_icon/sora/github.png">
+            <span>GitHub 开源地址</span>
+          </a>
+        </div>
+      </div>
+    </nav>
 
-  <footer class="app-footer tm-0">
-    <div class="footer-content">
-      <p>Powered by GitHub@<strong>kloping</strong></p>
-      <p>更新时间 <strong>26/04/27</strong></p>
-    </div>
-  </footer>
+    <main class="app-main">
+      <RouterView/>
+    </main>
+
+    <footer class="app-footer tm-0">
+      <div class="footer-content">
+        <p>Powered by GitHub@<strong>kloping</strong></p>
+        <p>更新时间 <strong>26/04/27</strong></p>
+      </div>
+    </footer>
+  </template>
+
+  <!-- 管理页面布局：由 AdminLayout 组件自行处理 -->
+  <RouterView v-else/>
 </template>
 
 <style scoped>

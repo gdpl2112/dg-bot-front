@@ -4,6 +4,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import index from '../views/index.vue'
 import join from '../views/join.vue'
 import login from '../views/login.vue'
+import AdminLayout from '../components/AdminLayout.vue'
 import manager from '../components/manager.vue'
 import bot from '../components/bot.vue'
 import conf from '../components/conf.vue'
@@ -23,58 +24,68 @@ const router = createRouter({
             path: '/',
             name: 'index',
             component: index,
+            meta: { admin: false }
         }, {
             path: '/join',
             name: 'join',
             component: join,
+            meta: { admin: false }
         }, {
             path: '/login',
             name: 'login',
             component: login,
+            meta: { admin: false }
         }, {
-            path: '/manager',
-            name: 'manager',
-            component: manager,
-        }, {
-            path: '/bot',
-            name: 'bot',
-            component: bot,
-        }, {
-            path: '/conf',
-            name: 'conf',
-            component: conf,
-        }, {
-            path: '/cron-list',
-            name: 'cron-list',
-            component: cronList,
-        }, {
-            path: '/cron',
-            name: 'cron',
-            component: cron,
-        }, {
-            path: '/passive',
-            name: 'passive',
-            component: passive,
-        }, {
-            path: '/optsv',
-            name: 'opts',
-            component: optsv,
-        }, {
-            path: '/callapi',
-            name: 'callapi',
-            component: callapi,
-        }, {
-            path: '/um',
-            name: 'um',
-            component: um,
-        },{
-            path: '/v11c',
-            name: 'v11c',
-            component: v11c,
-        }, {
-            path: '/conn-conf',
-            name: 'conn-conf',
-            component: connConf,
+            path: '/',
+            component: AdminLayout,
+            meta: { admin: true },
+            children: [
+                {
+                    path: 'bot',
+                    name: 'bot',
+                    component: bot,
+                }, {
+                    path: 'conf',
+                    name: 'conf',
+                    component: conf,
+                }, {
+                    path: 'manager',
+                    name: 'manager',
+                    component: manager,
+                }, {
+                    path: 'cron-list',
+                    name: 'cron-list',
+                    component: cronList,
+                }, {
+                    path: 'cron',
+                    name: 'cron',
+                    component: cron,
+                }, {
+                    path: 'passive',
+                    name: 'passive',
+                    component: passive,
+                }, {
+                    path: 'optsv',
+                    name: 'opts',
+                    component: optsv,
+                }, {
+                    path: 'callapi',
+                    name: 'callapi',
+                    component: callapi,
+                }, {
+                    path: 'um',
+                    name: 'um',
+                    component: um,
+                }, {
+                    path: 'v11c',
+                    name: 'v11c',
+                    component: v11c,
+                }, {
+                    path: 'conn-conf',
+                    name: 'conn-conf',
+                    component: connConf,
+                },
+            ]
         },
     ],
 })
