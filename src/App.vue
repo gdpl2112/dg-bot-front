@@ -98,7 +98,7 @@ function pushRoute(route: string) {
     <footer class="app-footer tm-0">
       <div class="footer-content">
         <p>Powered by GitHub@<strong>kloping</strong></p>
-        <p>更新时间 <strong>26/04/27</strong></p>
+        <p>更新时间 <strong>26/04/29</strong></p>
       </div>
     </footer>
   </template>
