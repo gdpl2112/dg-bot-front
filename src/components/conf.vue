@@ -1,246 +1,259 @@
-<style>
-#main {
-  border-radius: 15px;
-  background-color: rgba(255, 255, 255, 0.73);
-  padding-top: 10px;
-  padding-bottom: 10px;
+<style scoped>
+.conf-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.conf-field {
+  flex: 1;
+  min-width: 220px;
+}
+.code-area {
+  width: 100%;
+  min-height: 240px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  padding: 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.88rem;
+  background: rgba(248, 250, 252, 0.98);
+  color: #0f172a;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.code-area:focus {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.script-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.modal-body-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.7;
+}
+.modal-body-text.is-error { color: #dc2626; }
+.log-entry {
+  margin: 0;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
 }
 </style>
 
 <template>
-  <center>
-    <RouterLink style="width: 50%" to="/bot" type="button" class="btn btn-lg btn-block btn-outline-success">返回个人首页
-    </RouterLink>
-  </center>
-  <hr>
-  <div class="container" id="main">
-    <center style="color: rgba(33,151,252,0.95);"><h1> Bot代挂 配置中心 </h1></center>
-    <div class="" style="margin-top: 15px">
-      <div class="row">
-        <div class="input-group col-sm mb-3">
-          <label for="cd0">
-            <div class="input-group-prepend">
-              <span class="input-group-text">回复cd(单位/秒):</span>
-            </div>
-          </label>
-          <input id="cd0" type="number" min="1" class="form-control"/>
-          <button v-on:click="modify('cd0')" type="button" class="btn btn-outline-primary">修改</button>
-        </div>
-        <div class="input-group col-sm mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">复述前置:</span>
-          </div>
-          <input id="retell" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('retell')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">回复开启:</span>
-          </div>
-          <input id="open0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('open0')" type="button" class="btn btn-outline-primary">修改</button>
-          </div>
-        </div>
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">回复关闭:</span>
-          </div>
-          <input id="close0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('close0')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">调用开启:</span>
-          </div>
-          <input id="open1" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('open1')" type="button" class="btn btn-outline-primary">修改</button>
-          </div>
-        </div>
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">调用关闭:</span>
-          </div>
-          <input id="close1" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('close1')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
-      </div>
-      <small class="form-text text-muted">纯数字为好友f(id);g(id)为群聊;找不到时则发到自己bot</small>
-      <div class="row">
-        <div class="input-group col-sm mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">监听发送到:</span>
-          </div>
-          <input id="rsid" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('rsid')" type="button" class="btn btn-outline-primary">修改</button>
-          </div>
-        </div>
+  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
 
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">状态查看:</span>
-          </div>
-          <input id="status0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('status0')" type="button" class="btn btn-outline-primary">修改</button>
-          </div>
-        </div>
+  <div class="page-card">
+    <h1 class="page-title" style="color: rgba(37,99,235,0.95);">Bot代挂 · 配置中心</h1>
 
+    <!-- 回复配置 -->
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">回复CD(秒)</span>
+          <input type="number" min="1" v-model="formData.cd0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('cd0')">修改</button>
       </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">复述前置</span>
+          <input type="text" v-model="formData.retell">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('retell')">修改</button>
+      </div>
+    </div>
 
-      <div class="row">
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">添词:</span>
-          </div>
-          <input id="add0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('add0')" type="button" class="btn btn-outline-primary">修改</button>
-          </div>
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">回复开启</span>
+          <input type="text" v-model="formData.open0">
         </div>
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">添加时取消:</span>
-          </div>
-          <input id="cancel0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('cancel0')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">查词:</span>
-          </div>
-          <input id="select0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('select0')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
-        <div class="input-group col-sm  mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">删词:</span>
-          </div>
-          <input id="del0" type="text" class="form-control" aria-label="">
-          <div class="input-group-append">
-            <button v-on:click="modify('del0')" type="button" class="btn btn-outline-primary">修改
-            </button>
-          </div>
-        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('open0')">修改</button>
       </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">回复关闭</span>
+          <input type="text" v-model="formData.close0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('close0')">修改</button>
+      </div>
+    </div>
 
-      <hr>
-      <small class="form-text text-muted">通知(当bot上线/离线是访问指定url)</small>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text">通知:</span>
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">调用开启</span>
+          <input type="text" v-model="formData.open1">
         </div>
-        <input id="nu" type="text" class="form-control" aria-label="">
-        <div class="input-group-append">
-          <button v-on:click="modify('nu')" type="button" class="btn btn-outline-primary">修改</button>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('open1')">修改</button>
+      </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">调用关闭</span>
+          <input type="text" v-model="formData.close1">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('close1')">修改</button>
+      </div>
+    </div>
+
+    <div class="info-bar">纯数字为好友f(id); g(id)为群聊; 找不到时则发到自己bot</div>
+
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">监听发送到</span>
+          <input type="text" v-model="formData.rsid">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('rsid')">修改</button>
+      </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">状态查看</span>
+          <input type="text" v-model="formData.status0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('status0')">修改</button>
+      </div>
+    </div>
+
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">添词</span>
+          <input type="text" v-model="formData.add0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('add0')">修改</button>
+      </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">添加时取消</span>
+          <input type="text" v-model="formData.cancel0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('cancel0')">修改</button>
+      </div>
+    </div>
+
+    <div class="conf-row">
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">查词</span>
+          <input type="text" v-model="formData.select0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('select0')">修改</button>
+      </div>
+      <div class="conf-field">
+        <div class="input-card">
+          <span class="input-card-label">删词</span>
+          <input type="text" v-model="formData.del0">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('del0')">修改</button>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- 通知配置 -->
+    <div class="info-bar">通知(当bot上线/离线时访问指定URL)</div>
+    <div class="conf-row">
+      <div class="conf-field" style="flex:1">
+        <div class="input-card">
+          <span class="input-card-label">通知</span>
+          <input type="text" v-model="formData.nu">
+        </div>
+        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('nu')">修改</button>
+      </div>
+    </div>
+
+    <div class="info-bar">自定义脚本与[API调用]共用开关</div>
+
+    <!-- 脚本操作按钮 -->
+    <div class="script-actions">
+      <button class="action-btn action-btn-success" @click="codePost()">修改脚本</button>
+      <button class="action-btn action-btn-primary" @click="getException()">获取报错</button>
+      <button class="action-btn action-btn-outline" @click="getLogMsg()">获得日志</button>
+    </div>
+
+    <div class="info-bar">
+      示例js代码 使用Java Nashorn引擎
+      <a href="https://github.com/gdpl2112/dg-script" target="_blank" style="color:#1d4ed8;font-weight:600">详见仓库</a>
+      参考模版API
+    </div>
+
+    <textarea class="code-area" v-model="formData.code" placeholder="java script 自定义脚本"></textarea>
+  </div>
+
+  <!-- 日志/报错弹窗 -->
+  <div v-if="modalVisible" class="modal-mask" @click.self="closeModal">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-card-header">
+        <span class="modal-card-title">{{ modalTitle }}</span>
+        <button class="modal-card-close" @click="closeModal">✕</button>
+      </div>
+      <div class="modal-card-body">
+        <div :class="['modal-body-text', { 'is-error': isError }]">
+          <p v-for="(line, i) in modalLines" :key="i" class="log-entry">{{ line }}</p>
         </div>
       </div>
-      <div class="alert alert-info text-center" role="alert">
-        自定义脚本与[API调用]共用开关
-      </div>
-
-      <div style="width: 80%;margin-left: 10%;font-weight: bold;">
-        <button v-on:click="codePost('code')" type="button"
-                class="btn btn-outline-success btn-lg btn-block">修改
-        </button>
-        <button v-on:click="getException()" type="button"
-                class="btn btn-primary btn-lg btn-block">获取报错
-        </button>
-        <button v-on:click="getLogMsg()" type="button"
-                class="btn btn-secondary btn-lg btn-block">获得日志
-        </button>
-      </div>
-
-      <hr>
-      <center>
-        <p style="background-color: rgba(204,204,204,0.34);width: 80%;border-radius: 10px">示例js代码 使用Java Nashorn引擎
-          <a
-              href="https://github.com/gdpl2112/dg-script">详见仓库</a>参考模版API</p>
-      </center>
-      <div class="input-group">
-                <textarea style="height: 240px" id="code" class="form-control" aria-label="js 脚本"
-                          placeholder="java script 自定义脚本">
-                </textarea>
+      <div class="modal-card-footer">
+        <button class="action-btn action-btn-outline" @click="closeModal">关闭</button>
       </div>
     </div>
   </div>
-  <br>
-  <br>
-  <div class="modal fade" id="modal-a" tabindex="-1" aria-labelledby="moda-label" aria-hidden="true"
-       data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="moda-label">报错详情</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" @click="showLoging=false;"
-                  aria-label="关闭"></button>
-        </div>
-        <div class="modal-body text-danger" id="modal_body">
-          <samp id="modal-body">
-
-          </samp>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                  @click="showLoging=false;ma0.modal('hide')">
-            关闭
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br>
 </template>
 
 <script setup lang="ts">
-
 import axios from "@/axios_in";
-import $ from 'jquery'
-import {RouterLink} from "vue-router";
-import {onMounted} from "vue";
+import {onMounted, onBeforeUnmount, reactive, ref} from "vue";
 import {formatMsgTime} from "@/assets/utils";
 
-let ma0: any;
-let mbody: any;
+/** 表单数据，键与后端配置项对应 */
+const formData = reactive<Record<string, any>>({
+  cd0: '', retell: '', open0: '', close0: '',
+  open1: '', close1: '', rsid: '', status0: '',
+  add0: '', cancel0: '', select0: '', del0: '',
+  nu: '', code: ''
+})
+
+/** 弹窗控制 */
+const modalVisible = ref(false)
+const modalTitle = ref('')
+const modalLines = ref<string[]>([])
+const isError = ref(false)
+let showLoging = false
+let logTimer: ReturnType<typeof setInterval> | null = null
+
 onMounted(() => {
-  ma0 = $('#modal-a') as any;
-  mbody = $("#modal-body");
-  axios.get("/api/config",).then(function (response) {
-    let keys = Object.keys(response.data);
-    for (let i = 0; i < keys.length; i++) {
-      let key = keys[i];
-      let value = response.data[key]
-      $("#" + key).val(value)
-    }
+  axios.get("/api/config").then(function (response) {
+    // 将后端返回的配置项填充到表单
+    Object.keys(response.data).forEach(key => {
+      if (key in formData) {
+        formData[key] = response.data[key]
+      }
+    })
   }).catch(function (err) {
     alert(err);
   })
 })
 
-function modify(id) {
-  let key = id;
-  let value: string = $("#" + id).val() as string
+onBeforeUnmount(() => {
+  if (logTimer) clearInterval(logTimer)
+})
+
+/**
+ * 修改单个配置项
+ * @param key 配置项键名
+ */
+function modify(key: string) {
+  let value: string = String(formData[key] ?? '')
   if (value.indexOf("&") >= 0) value = encodeURIComponent(value)
   axios.get("/api/conf-modify?key=" + key + "&value=" + value).then(function (response) {
     alert(response.data)
@@ -249,10 +262,10 @@ function modify(id) {
   })
 }
 
-function codePost(id: string) {
-  let value: string = $("#" + id).val() as string
+/** 提交自定义脚本代码 */
+function codePost() {
   let df = new FormData()
-  df.set("code", value)
+  df.set("code", formData.code)
   axios.post("/api/code-modify", df).then(function (response) {
     alert(response.data)
   }).catch(function (err) {
@@ -260,49 +273,47 @@ function codePost(id: string) {
   })
 }
 
+/** 获取报错信息并展示弹窗 */
 function getException() {
   axios.get("/api/get-exception").then(function (response) {
-    $("#moda-label").html("时间: " + formatMsgTime(response.data.time))
-    mbody.html(response.data.msg.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;"))
-    $("#modal_body").addClass("text-danger")
-    ma0.modal('show')
+    modalTitle.value = "时间: " + formatMsgTime(response.data.time)
+    modalLines.value = response.data.msg
+      .replaceAll("\r\n", "\n")
+      .replaceAll("\t", "  ")
+      .split("\n")
+    isError.value = true
+    modalVisible.value = true
   }).catch(function (err) {
     alert(err);
   })
 }
 
-let showLoging = false
-let hb = ""
-
-setInterval(function () {
-  if (showLoging) {
-    hb = ""
-    axios.get("/api/get-log").then(function (response) {
-      response.data.forEach(function (value) {
-        hb += ("<p>" + value + "</p>")
-      })
-      mbody.html(hb)
-    })
-  }
-}, 3000);
-
+/** 获取日志信息并展示弹窗，同时开启自动刷新 */
 function getLogMsg() {
   axios.get("/api/get-log").then(function (response) {
-
-    $("#moda-label").html("日志信息 #脚本内使用log.log(str)可打印日志")
-
-    hb = ""
-    response.data.forEach(function (value) {
-      hb += ("<p>" + value + "</p>")
-    })
-    mbody.html(hb)
-
-    $("#modal_body").removeClass("text-danger")
+    modalTitle.value = "日志信息 #脚本内使用log.log(str)可打印日志"
+    modalLines.value = response.data
+    isError.value = false
     showLoging = true
-    ma0.modal('show')
+    modalVisible.value = true
+    // 每3秒自动刷新日志
+    if (!logTimer) {
+      logTimer = setInterval(() => {
+        if (showLoging) {
+          axios.get("/api/get-log").then(function (response) {
+            modalLines.value = response.data
+          })
+        }
+      }, 3000)
+    }
   }).catch(function (err) {
     alert(err);
   })
 }
 
+/** 关闭弹窗并停止日志刷新 */
+function closeModal() {
+  modalVisible.value = false
+  showLoging = false
+}
 </script>

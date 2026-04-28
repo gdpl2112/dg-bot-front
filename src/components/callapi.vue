@@ -1,134 +1,158 @@
-<style>
-
+<style scoped>
+.api-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  margin-bottom: 0.65rem;
+  transition: background 0.2s;
+}
+.api-card:hover { background: rgba(255, 255, 255, 0.88); }
+.api-info { flex: 1; min-width: 0; }
+.api-info-item {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.3rem 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+}
+.api-info-label { color: #64748b; font-weight: 600; white-space: nowrap; }
+.api-info-value { color: #0f172a; word-break: break-all; }
+.api-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.api-favicon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+@media (max-width: 576px) {
+  .api-card { flex-direction: column; }
+  .api-actions { flex-direction: row; }
+}
 </style>
 
 <template>
-  <center>
-    <RouterLink style="width: 50%" to="/bot" type="button" class="btn btn-lg btn-block btn-outline-success">返回个人首页
-    </RouterLink>
-  </center>
-  <hr>
-  <div class="modal fade" id="appendModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">添加一个API</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"
-                  @click="($('#appendModal') as any).modal('hide')">X</button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-out">输出格式</span>
-            <input type="text" class="form-control" aria-label="Sizing example input">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-outArgs">输出参数</span>
-            <input placeholder="用,分割参数(英文" type="text" class="form-control"
-                   aria-label="Sizing example input">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-touch">触发词</span>
-            <input type="text" class="form-control" aria-label="Sizing example input">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-url">网址</span>
-            <input type="text" class="form-control" aria-label="Sizing example input">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-jude">否条件</span>
-            <input type="text" class="form-control" aria-label="Sizing example input">
-          </div>
+  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
 
+  <div class="page-card">
+    <h1 class="page-title">API调用管理</h1>
+
+    <div class="info-bar">
+      参考 <a href="https://github.com/gdpl2112/MiraiCallApiPlugin" target="_blank" style="color:#1d4ed8;font-weight:600">MiraiCallApiPlugin</a>
+    </div>
+
+    <div style="text-align:center; margin-bottom:1rem;">
+      <button class="action-btn action-btn-primary" @click="openAddModal()">添加API</button>
+    </div>
+
+    <!-- API列表 -->
+    <div v-for="e in data" :key="e.touch" class="api-card">
+      <div class="api-info">
+        <div class="api-info-item">
+          <span class="api-info-label">输出格式:</span>
+          <span class="api-info-value">{{ e.out }}</span>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                  @click="($('#appendModal') as any).modal('hide')">关闭
-          </button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="submit0()">确定</button>
+        <div class="api-info-item">
+          <span class="api-info-label">输出参数:</span>
+          <span class="api-info-value">{{ getStrArgs(e.outArgs) }}</span>
         </div>
+        <div class="api-info-item">
+          <span class="api-info-label">触发词:</span>
+          <span class="api-info-value">{{ e.touch }}</span>
+        </div>
+        <div class="api-info-item">
+          <span class="api-info-label">地址:</span>
+          <span class="api-info-value">{{ e.url }}</span>
+        </div>
+        <div class="api-info-item">
+          <span class="api-info-label">不输出条件:</span>
+          <span class="api-info-value">{{ e.jude }}</span>
+        </div>
+      </div>
+      <div class="api-actions">
+        <img class="api-favicon" :src="getFavicon(e)" alt="favicon">
+        <button class="action-btn action-btn-danger" @click="delete0(e.touch)">删除</button>
+        <button class="action-btn action-btn-outline" @click="openModifyModal(e)">修改</button>
+      </div>
+    </div>
+
+    <div v-if="data.length === 0" style="text-align:center;color:#94a3b8;padding:2rem 0;">暂无API数据</div>
+  </div>
+
+  <!-- 添加/修改弹窗 -->
+  <div v-if="modalVisible" class="modal-mask" @click.self="modalVisible=false">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        <span class="modal-card-title">{{ isEditing ? '修改API' : '添加API' }}</span>
+        <button class="modal-card-close" @click="modalVisible=false">✕</button>
+      </div>
+      <div class="modal-card-body">
+        <div class="input-card" style="margin-bottom:0.65rem">
+          <span class="input-card-label">输出格式</span>
+          <input type="text" v-model="form.out">
+        </div>
+        <div class="input-card" style="margin-bottom:0.65rem">
+          <span class="input-card-label">输出参数</span>
+          <input type="text" v-model="form.outArgs" placeholder="用,分割参数(英文)">
+        </div>
+        <div class="input-card" style="margin-bottom:0.65rem">
+          <span class="input-card-label">触发词</span>
+          <input type="text" v-model="form.touch">
+        </div>
+        <div class="input-card" style="margin-bottom:0.65rem">
+          <span class="input-card-label">网址</span>
+          <input type="text" v-model="form.url">
+        </div>
+        <div class="input-card" style="margin-bottom:0.65rem">
+          <span class="input-card-label">否条件</span>
+          <input type="text" v-model="form.jude">
+        </div>
+      </div>
+      <div class="modal-card-footer">
+        <button class="action-btn action-btn-outline" @click="modalVisible=false">关闭</button>
+        <button class="action-btn action-btn-primary" @click="submit0()">确定</button>
       </div>
     </div>
   </div>
-  <br>
-
-  <div class="container">
-    <div class="row-12">
-      <div class="center-block">
-        <div style="text-align: center;">
-          <button @click="add0()" type="button" class="btn btn-primary btn-lg btn-block" data-bs-toggle="modal">
-            添加
-          </button>
-        </div>
-        <br>
-        <hr>
-      </div>
-    </div>
-  </div>
-
-  <div class="container bg-light">
-    <div class="row">
-      <div id="table_main" class="center-block col-12">
-        <small class="form-text text-muted">tips: 参考 https://github.com/gdpl2112/MiraiCallApiPlugin</small>
-        <div class="container">
-          <hr>
-          <div class="row ">
-            <div class="col-8">
-              <ul class="list-group">
-                <li class="list-group-item disabled" aria-disabled="true">输出格式</li>
-                <li class="list-group-item disabled" aria-disabled="true">输出参数</li>
-                <li class="list-group-item disabled" aria-disabled="true">触发词</li>
-                <li class="list-group-item disabled" aria-disabled="true">地址</li>
-                <li class="list-group-item disabled" aria-disabled="true">不输出条件</li>
-              </ul>
-            </div>
-            <div class="col-4">操作</div>
-          </div>
-          <div v-for="(e) in data" :class="getTrClass()+' row'"
-               style="margin-top: 15px;padding-bottom: 10px;padding-top: 10px">
-            <div class="col-8">
-              <ul class="list-group">
-                <li class="list-group-item" style="overflow:scroll;">{{ e.out }}</li>
-                <li class="list-group-item">{{ getStrArgs(e.outArgs) }}</li>
-                <li class="list-group-item">{{ e.touch }}</li>
-                <li class="list-group-item" style="overflow:scroll;">{{ e.url }}</li>
-                <li class="list-group-item" style="overflow:scroll;">{{ e.jude }}</li>
-              </ul>
-            </div>
-            <div class="col-4">
-              <img class="rounded img-fluid img-responsive" :src="getFavicon(e)" style="max-width: 90px">
-              <hr>
-              <button v-on:click="delete0(e.touch)" type="button" class="btn btn-danger col">删除</button>
-              <hr>
-              <button v-on:click="modify0(e)" type="button" class="btn btn-primary col">修改</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </template>
 
 <script setup lang="ts">
-
-import $ from 'jquery'
 import axios from "@/axios_in";
-import {onMounted, ref} from "vue";
-import {RouterLink} from "vue-router";
+import {onMounted, reactive, ref} from "vue";
 
+/** API列表数据 */
+let data = ref<any[]>([])
 
+/** 弹窗控制 */
+const modalVisible = ref(false)
+const isEditing = ref(false)
+
+/** 表单数据 */
+const form = reactive({ out: '', outArgs: '', touch: '', url: '', jude: '' })
+
+onMounted(() => {
+  axios.get("/api/ca/get_data").then(function (response) {
+    data.value = response.data;
+  }).catch(function (err) {
+    alert(err);
+  })
+})
+
+/** 提交添加/修改 */
 function submit0() {
-  let e_out = $("#inputGroup-out").next();
-  let e_outArgs = $("#inputGroup-outArgs").next();
-  let e_touch = $("#inputGroup-touch").next();
-  let e_url = $("#inputGroup-url").next();
-  let e_jude = $("#inputGroup-jude").next();
-
-  let v1 = encodeURIComponent(e_out.val() as string)
-  let v2 = encodeURIComponent(e_outArgs.val() as  string)
-  let v3 = encodeURIComponent(e_touch.val() as  string)
-  let v4 = encodeURIComponent(e_url.val() as  string)
-  let v5 = encodeURIComponent(e_jude.val() as  string)
+  let v1 = encodeURIComponent(form.out)
+  let v2 = encodeURIComponent(form.outArgs)
+  let v3 = encodeURIComponent(form.touch)
+  let v4 = encodeURIComponent(form.url)
+  let v5 = encodeURIComponent(form.jude)
   let url = "/api/ca/append?out=" + v1
       + "&outArgs=" + v2
       + "&touch=" + v3
@@ -136,89 +160,73 @@ function submit0() {
       + "&jude=" + v5;
 
   axios.post(url).then(function (response) {
-    trIndex = 0;
     data.value = response.data;
-    e_out.val("")
-    e_outArgs.val("")
-    e_touch.val("")
-    e_url.val("")
-    e_jude.val("")
+    modalVisible.value = false
+    resetForm()
   }).catch(function (err) {
     alert(err);
   })
 }
 
-function add0() {
-  $('#exampleModalLabel').html('添加一个API');
-  ($('#appendModal') as any).modal('show')
-  let e_out = $("#inputGroup-out").next();
-  let e_outArgs = $("#inputGroup-outArgs").next();
-  let e_touch = $("#inputGroup-touch").next();
-  let e_url = $("#inputGroup-url").next();
-  let e_jude = $("#inputGroup-jude").next();
-
-  e_out.val("")
-  e_outArgs.val("")
-  e_touch.val("")
-  e_url.val("")
-  e_jude.val("")
+/** 打开添加弹窗 */
+function openAddModal() {
+  isEditing.value = false
+  resetForm()
+  modalVisible.value = true
 }
 
-let trClasses = ["alert-primary", "alert-secondary", "alert-success", "alert-danger", "alert-warning", "alert-info", "alert-light", "alert-dark"];
-let trIndex = 0
+/**
+ * 打开修改弹窗，填充已有数据
+ * @param e 当前API数据对象
+ */
+function openModifyModal(e: any) {
+  isEditing.value = true
+  form.out = e.out
+  form.outArgs = e.outArgs
+  form.touch = e.touch
+  form.url = e.url
+  form.jude = e.jude
+  modalVisible.value = true
+}
 
-let data = ref([])
-
-onMounted(() => {
-  axios.get("/api/ca/get_data").then(function (response) {
-    trIndex = 0;
+/**
+ * 删除指定触发词的API
+ * @param touch 触发词
+ */
+function delete0(touch: string) {
+  axios.get("/api/ca/delete?touch=" + touch).then(function (response) {
     data.value = response.data;
   }).catch(function (err) {
     alert(err);
   })
-})
+}
 
-function getFavicon(e) {
+/**
+ * 获取网站favicon地址
+ * @param e API数据对象
+ * @return favicon URL
+ */
+function getFavicon(e: any) {
   let u0 = e.url;
   let i0 = u0.substr(8).indexOf("/")
   return u0.substr(0, 9 + i0) + "favicon.ico"
 }
 
-function delete0(touch) {
-  axios.get("/api/ca/delete?touch=" + touch).then(function (response) {
-    trIndex = 0;
-    data.value = response.data;
-  }).catch(function (err) {
-    alert(err);
-  })
+/**
+ * 格式化输出参数
+ * @param args 逗号分隔的参数字符串
+ * @return 换行分隔的参数
+ */
+function getStrArgs(args: string) {
+  return args.split(",").join(", ")
 }
 
-function modify0(e) {
-  let e_out = $("#inputGroup-out").next();
-  let e_outArgs = $("#inputGroup-outArgs").next();
-  let e_touch = $("#inputGroup-touch").next();
-  let e_url = $("#inputGroup-url").next();
-  let e_jude = $("#inputGroup-jude").next();
-
-  e_out.val(e.out)
-  e_outArgs.val(e.outArgs)
-  e_touch.val(e.touch)
-  e_url.val(e.url)
-  e_jude.val(e.jude)
-  $('#exampleModalLabel').html('修改一个API');
-  ($('#appendModal') as any).modal('show')
+/** 重置表单 */
+function resetForm() {
+  form.out = ''
+  form.outArgs = ''
+  form.touch = ''
+  form.url = ''
+  form.jude = ''
 }
-
-function getTrClass() {
-  return trClasses[trIndex++ % trClasses.length].toString()
-}
-
-function getStrArgs(args) {
-  let out = "";
-  args.split(",").forEach(function (e) {
-    out = out + e + "\n";
-  })
-  return out.trim()
-}
-
 </script>

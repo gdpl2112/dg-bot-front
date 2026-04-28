@@ -1,105 +1,198 @@
-<style>
+<style scoped>
+.bot-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(37, 99, 235, 0.15);
+  margin-bottom: 0.75rem;
+}
 
+.profile-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.status-card-success {
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  color: #15803d;
+}
+
+.status-card-danger {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #b91c1c;
+}
+
+.auth-section {
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  margin-bottom: 1rem;
+}
+
+.auth-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.auth-row input {
+  flex: 1;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.9);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-row input:focus {
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.65rem;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  transition: all 0.2s;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.feature-count {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.feature-label {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.feature-link {
+  margin-top: 0.25rem;
+}
 </style>
 
 <template>
-  <center style="color: rgba(255,79,152,0.97);"><h1> Bot代挂信息 个人中心 </h1></center>
-  <div class="container" style="margin-top: 45px">
-    <div class="row" style="margin-bottom: 25px;">
-      <div class="col-1 col-md-2"></div>
-      <div class="col-10 col-md-8"
-           style="border-radius: 25px;background-color: rgba(86,117,105,0.4);text-align: center;">
-        <br>
-        <img style="max-width: 75px" :src="user.icon" alt="icon">
-        <br>
-        <br>
-        <div class="media-body">
-          <br>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">QQ</span>
-            </div>
-            <input type="text" aria-label="name" class="form-control" :value="user.qid">
-          </div>
-          <br>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">昵称</span>
-            </div>
-            <input type="text" aria-label="name" class="form-control" :value="user.nickname">
-          </div>
-          <br>
-          <div class="input-group form-inline justify-content-center">
-            <div class="alert alert-secondary" role="alert">
-              代挂剩余时间:
-              <div :class="'form-group mx-sm-5 mb-2 '+ je0(user.expire)">{{ je(user.expire) }}</div>
-            </div> &nbsp;&nbsp;
-            <div class="alert alert-secondary" role="alert">
-              自上次登录已在线时长:
-              <div :class="'form-group mx-sm-5 mb-2 '+ ji0(user.t0)">{{ formatMsgTime1(user.t0, "未在线") }}
-              </div>
-            </div>
-          </div>
-          <br>
-          <hr>
-          <center>
-            <div class="alert alert-info" style="background-color: rgba(220,210,253,0.78)" role="alert">
-              <RouterLink to="/conf" type="button" class="btn btn-outline-info">配置中心</RouterLink>
-              <br>
-              <hr>
+  <div class="page-card">
+    <h1 class="page-title" style="color: rgba(255,79,152,0.97);">Bot代挂信息 · 个人中心</h1>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">授权码</span>
-                </div>
-                <input type="text" id="auth_input0" class="form-control" placeholder="点击获取后修改"
-                       aria-describedby="auth_but">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" @click="authBut0()" id="auth_but">
-                    {{ (abit == null || abit == "") ? "获取" : "修改" }}
-                  </button>
-                </div>
-              </div>
+    <!-- 用户头像与基本信息 -->
+    <div class="profile-header">
+      <img class="bot-avatar" :src="user.icon" alt="头像">
+      <div class="input-card" style="max-width: 320px; margin: 0.5rem auto;">
+        <span class="input-card-label">QQ</span>
+        <input type="text" :value="user.qid" readonly>
+      </div>
+      <div class="input-card" style="max-width: 320px; margin: 0.5rem auto;">
+        <span class="input-card-label">昵称</span>
+        <input type="text" :value="user.nickname" readonly>
+      </div>
+    </div>
 
-            </div>
-          </center>
-          <hr>
-          <div class="input-group form-inline">
+    <!-- 状态信息 -->
+    <div class="status-row">
+      <div :class="['status-card', user.expire > 0 && new Date(user.expire) > new Date() ? 'status-card-success' : 'status-card-danger']">
+        代挂剩余时间: <strong>{{ je(user.expire) }}</strong>
+      </div>
+      <div :class="['status-card', user.t0 > 0 ? 'status-card-success' : 'status-card-danger']">
+        在线时长: <strong>{{ formatMsgTime1(user.t0, "未在线") }}</strong>
+      </div>
+    </div>
 
-            <div class="alert alert-info" role="alert">
-              管理员数: {{ count.mc }} &nbsp;
-              <RouterLink to="/manager" type="button" class="btn btn-info">管理</RouterLink>
-            </div>
-            &nbsp;&nbsp;
-            <div class="alert alert-secondary" role="alert">
-              定时任务数: {{ count.cc }} &nbsp;
-              <RouterLink to="/cron-list" type="button" class="btn btn-secondary">管理</RouterLink>
-            </div> &nbsp;&nbsp;
+    <hr>
 
-            <div class="alert alert-warning" role="alert">
-              回复词数: {{ count.pc }} &nbsp;
-              <RouterLink to="/passive" type="button" class="btn btn-warning">管理</RouterLink>
-            </div>
+    <!-- 配置中心入口 -->
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <RouterLink to="/conf" class="action-btn action-btn-primary" style="padding: 0.55rem 1.5rem;">
+        配置中心
+      </RouterLink>
+    </div>
 
-            <div class="alert alert-primary" role="alert">
-              调用api数: {{ count.cac }} &nbsp;
-              <RouterLink to="/callapi" type="button" class="btn btn-light">管理</RouterLink>
-            </div>&nbsp;&nbsp;
+    <!-- 授权码 -->
+    <div class="auth-section">
+      <div class="auth-row">
+        <span class="input-card-label">授权码</span>
+        <input type="text" v-model="abit" placeholder="点击获取后修改">
+        <button class="action-btn action-btn-outline" @click="authBut0()">
+          {{ (abit == null || abit == '') ? '获取' : '修改' }}
+        </button>
+      </div>
+    </div>
 
-            <div class="alert alert-success" role="alert">
-              内置扩展
-              <RouterLink to="/optsv" type="button" class="btn btn-success">可选功能</RouterLink>
-            </div>&nbsp;&nbsp;
+    <hr>
 
-            <div class="alert alert-dark" role="alert">
-              v11功能
-              <RouterLink to="/v11c" type="button" class="btn btn-dark">管理</RouterLink>
-            </div> &nbsp;&nbsp;
-
-
-          </div>
-        </div>
-        <br>
+    <!-- 功能统计卡片网格 -->
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feature-count">{{ count.mc }}</span>
+        <span class="feature-label">管理员</span>
+        <RouterLink to="/manager" class="action-btn action-btn-outline feature-link">管理</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">{{ count.cc }}</span>
+        <span class="feature-label">定时任务</span>
+        <RouterLink to="/cron-list" class="action-btn action-btn-outline feature-link">管理</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">{{ count.pc }}</span>
+        <span class="feature-label">回复词</span>
+        <RouterLink to="/passive" class="action-btn action-btn-outline feature-link">管理</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">{{ count.cac }}</span>
+        <span class="feature-label">调用API</span>
+        <RouterLink to="/callapi" class="action-btn action-btn-outline feature-link">管理</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">—</span>
+        <span class="feature-label">内置扩展</span>
+        <RouterLink to="/optsv" class="action-btn action-btn-outline feature-link">可选功能</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">—</span>
+        <span class="feature-label">V11功能</span>
+        <RouterLink to="/v11c" class="action-btn action-btn-outline feature-link">管理</RouterLink>
       </div>
     </div>
   </div>
@@ -108,17 +201,21 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "@/axios_in";
-import $ from 'jquery'
 import {formatMsgTime1} from "@/assets/utils";
 
+/** 用户基本信息 */
 let user = ref({t0: -1, expire: -1, nickname: "", qid: "", icon: ""})
 
+/** 各功能统计计数 */
 let count = ref({mc: 0, cc: 0, pc: 0, cac: 0})
 
-onMounted(() => {
+/** 授权码输入绑定 */
+let abit = ref("")
 
+onMounted(() => {
   axios.get('/api/user').then(response => {
     user.value = response.data
+    // 在线时每秒递增计时
     if (user.value.t0 > 0) {
       setInterval(function () {
         user.value.t0++;
@@ -128,12 +225,13 @@ onMounted(() => {
   axios.get('/api/statistics').then(response => {
     count.value = response.data
   })
-  ainp0 = $("#auth_input0");
-  ainp0.on("change", function () {
-    abit.value = ainp0.val()
-  })
 })
 
+/**
+ * 格式化过期时间
+ * @param t 过期时间戳
+ * @return 格式化后的日期字符串或"已过期"
+ */
 function je(t: number) {
   let dateTime = new Date(t)
   let nowTime = new Date()
@@ -147,33 +245,13 @@ function je(t: number) {
   }
 }
 
-function je0(t: number) {
-  let dateTime = new Date(t)
-  let nowTime = new Date()
-  if (nowTime.getTime() > dateTime.getTime()) {
-    return "alert alert-danger"
-  } else {
-    return "alert alert-success"
-  }
-}
-
-function ji0(t: number) {
-  if (t <= 0) {
-    return "alert alert-danger"
-  } else {
-    return "alert alert-success"
-  }
-}
-
-
-let abit = ref("")
-// 授权码按钮文字
-let ainp0: any
-
+/**
+ * 授权码获取或修改
+ * 空值时获取，有值时提交修改
+ */
 function authBut0() {
   if (abit.value == "") {
     axios.get('/api/cpwd').then(response => {
-      ainp0.val(response.data)
       abit.value = response.data
     })
   } else {
@@ -186,5 +264,4 @@ function authBut0() {
     })
   }
 }
-
 </script>

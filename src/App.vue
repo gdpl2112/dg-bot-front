@@ -297,7 +297,9 @@ function pushRoute(route: string) {
   width: calc(100% - 2rem);
   max-width: 1180px;
   margin: 1.35rem auto 2rem;
-  min-height: 60vh;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
 }
 
 /* 页脚 */

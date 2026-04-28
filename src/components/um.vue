@@ -1,63 +1,90 @@
-<style>
-
+<style scoped>
+.user-card {
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  margin-bottom: 0.65rem;
+  transition: background 0.2s;
+}
+.user-card:hover { background: rgba(255, 255, 255, 0.88); }
+.user-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.user-row .input-card { flex: 1; min-width: 120px; }
+.date-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.date-input {
+  width: 60px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  outline: none;
+}
+.date-input:focus { border-color: rgba(37, 99, 235, 0.35); }
+.date-label { font-size: 0.82rem; color: #64748b; font-weight: 600; }
 </style>
 
 <template>
-  <div class="container tm-0">
-    <div class="row">
-      <div class="list-group col" id="main-div">
-        <hr>
-        <center>
-          <button style="width: 60%" type="button" class="btn btn-lg btn-outline-danger" v-on:click="likeNow()">
-            补充点赞
-          </button>
-        </center>
-        <hr>
-        <div class="list-group-item list-group-item-action" v-for="e in list">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">{{ e.qid }}</span>
-            </div>
-            <input :id="'auth-'+e.qid" type="text" class="form-control" :value="e.auth">
-            <div class="input-group-prepend">
-              <span class="input-group-text">exp</span>
-            </div>
-            <input :qid="e.qid" :id="'exp-'+e.qid" type="text" class="form-control i" :value="e.exp">
-          </div>
-          <div class="input-group">
-            <div class="alert alert-secondary" role="alert">
-              自上次登录已在线时长:
-              <div :class="'form-group mx-sm-5 mb-2 '+ ji0(e.t0)">{{ formatMsgTime1(e.t0, "未在线") }}
-              </div>
-            </div>
-            <div class="input-group-prepend">
-              <span class="input-group-text">年</span>
-            </div>
-            <input :qid="e.qid" :id="'year-'+e.qid" type="text" class="form-control o" :value="e.y">
-            <div class="input-group-prepend">
-              <span class="input-group-text">月</span>
-            </div>
-            <input :qid="e.qid" :id="'month-'+e.qid" type="text" class="form-control o" :value="e.m">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="addon-wrapping">日</span>
-            </div>
-            <input :qid="e.qid" :id="'day-'+e.qid" type="text" class="form-control o" :value="e.d">
-            &nbsp;&nbsp;
-          </div>
-          <button type="button" class="btn btn-info" v-on:click="modify(e.qid)">修改</button>
+  <div class="page-card">
+    <h1 class="page-title">用户管理</h1>
+
+    <div style="text-align:center; margin-bottom:1rem;">
+      <button class="action-btn action-btn-danger" @click="likeNow()">补充点赞</button>
+    </div>
+
+    <div v-for="e in list" :key="e.qid" class="user-card">
+      <div class="user-row">
+        <div class="input-card">
+          <span class="input-card-label">{{ e.qid }}</span>
+          <input type="text" v-model="e.auth">
+        </div>
+        <div class="input-card" style="max-width:180px">
+          <span class="input-card-label">exp</span>
+          <input type="text" v-model="e.exp" @change="onExpChange(e)">
         </div>
       </div>
+
+      <div :class="['status-badge', e.t0 > 0 ? 'status-badge-success' : 'status-badge-danger']" style="margin-bottom:0.5rem">
+        在线时长: {{ formatMsgTime1(e.t0, "未在线") }}
+      </div>
+
+      <div class="date-row">
+        <span class="date-label">年</span>
+        <input class="date-input" type="text" v-model="e.y" @change="onDateChange(e)">
+        <span class="date-label">月</span>
+        <input class="date-input" type="text" v-model="e.m" @change="onDateChange(e)">
+        <span class="date-label">日</span>
+        <input class="date-input" type="text" v-model="e.d" @change="onDateChange(e)">
+      </div>
+
+      <button class="action-btn action-btn-primary" @click="modify(e.qid)">修改</button>
     </div>
+
+    <div v-if="list.length === 0" style="text-align:center;color:#94a3b8;padding:2rem 0;">暂无用户数据</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "@/axios_in";
-import $ from 'jquery'
 import {formatMsgTime1} from "@/assets/utils.js";
 
-let list = ref([])
+/** 用户列表 */
+let list = ref<any[]>([])
+
 onMounted(() => {
   axios.get("/api/m/list").then(function (response) {
     list.value = response.data
@@ -66,10 +93,14 @@ onMounted(() => {
   })
 })
 
-function modify(id) {
-  let auth = $("#auth-" + id).val()
-  let exp = $("#exp-" + id).val()
-  axios.get("/api/m/modify?qid=" + id + "&auth=" + auth + "&exp=" + exp).then(function (response) {
+/**
+ * 修改用户授权码和过期时间
+ * @param id 用户QQ号
+ */
+function modify(id: string) {
+  let e = list.value.find(item => item.qid === id)
+  if (!e) return
+  axios.get("/api/m/modify?qid=" + id + "&auth=" + e.auth + "&exp=" + e.exp).then(function (response) {
     list.value = response.data
     alert("ok")
   }).catch(function (err) {
@@ -77,51 +108,37 @@ function modify(id) {
   })
 }
 
-function ji0(t) {
-  if (t <= 0) {
-    return "alert alert-danger"
-  } else {
-    return "alert alert-success"
-  }
-}
-
-const handleChange0 = function (this: HTMLElement) {
-  let qid = $(this).attr("qid")
-  let year = $("#year-" + qid).val()
-  let month = $("#month-" + qid).val()
-  let day = $("#day-" + qid).val()
-  axios.get("/api/m/get-exp?y=" + year + "&m=" + month + "&d=" + day).then(function (response) {
-    $("#exp-" + qid).val(response.data)
-  }).catch(function (err) {
-    alert(err);
-  })
-};
-const handleChange1 = function (this: HTMLElement) {
-  let qid = $(this).attr("qid")
-  let exp = $("#exp-" + qid).val()
-  axios.get("/api/m/exp-ymd?exp=" + exp).then(function (response) {
-    let ds = response.data
-    $("#year-" + qid).val(ds[0])
-    $("#month-" + qid).val(ds[1])
-    $("#day-" + qid).val(ds[2])
-  }).catch(function (err) {
-    alert(err);
-  })
-};
-
+/** 立刻执行补充点赞 */
 function likeNow() {
   axios.get("/api/m/autoLike").then(function (response) {
     alert(response.data)
   })
 }
 
-onMounted(() => {
-  $(document).on('change', '.o', handleChange0);
-  $(document).on('change', '.i', handleChange1);
-});
+/**
+ * 日期变更时自动计算exp
+ * @param e 用户数据对象
+ */
+function onDateChange(e: any) {
+  axios.get("/api/m/get-exp?y=" + e.y + "&m=" + e.m + "&d=" + e.d).then(function (response) {
+    e.exp = response.data
+  }).catch(function (err) {
+    alert(err);
+  })
+}
 
-onBeforeUnmount(() => {
-  $(document).off('change', '.o', handleChange0);
-  $(document).off('change', '.i', handleChange1);
-});
+/**
+ * exp变更时自动反算年月日
+ * @param e 用户数据对象
+ */
+function onExpChange(e: any) {
+  axios.get("/api/m/exp-ymd?exp=" + e.exp).then(function (response) {
+    let ds = response.data
+    e.y = ds[0]
+    e.m = ds[1]
+    e.d = ds[2]
+  }).catch(function (err) {
+    alert(err);
+  })
+}
 </script>

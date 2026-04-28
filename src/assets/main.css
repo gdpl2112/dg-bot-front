@@ -91,3 +91,268 @@ hr {
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
+
+/* ========== 共享设计系统 ========== */
+.page-card {
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(130%) blur(14px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 1.25rem;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto 1rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid rgba(22, 163, 74, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #16a34a;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-link:hover {
+    background: rgba(22, 163, 74, 0.08);
+    border-color: rgba(22, 163, 74, 0.5);
+    transform: translateY(-1px);
+}
+
+.input-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 12px;
+    background: rgba(248, 250, 252, 0.98);
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-card:focus-within {
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input-card-label {
+    padding: 0.55rem 0.85rem;
+    background: rgba(241, 245, 249, 0.98);
+    border-right: 1px solid rgba(15, 23, 42, 0.08);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap;
+}
+
+.input-card input,
+.input-card select,
+.input-card textarea {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.92rem;
+    color: #0f172a;
+    outline: none;
+    min-width: 0;
+}
+
+.input-card input::placeholder,
+.input-card textarea::placeholder {
+    color: #94a3b8;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.action-btn:hover { transform: translateY(-1px); }
+
+.action-btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-color: #1d4ed8;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.action-btn-success {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-color: #15803d;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+}
+
+.action-btn-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border-color: #b91c1c;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.action-btn-outline {
+    background: rgba(248, 250, 252, 0.98);
+    border-color: rgba(148, 163, 184, 0.35);
+    color: #0f172a;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.action-btn-outline:hover {
+    background: rgba(226, 232, 240, 0.98);
+    border-color: rgba(100, 116, 139, 0.4);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.status-badge-success { background: rgba(22, 163, 74, 0.12); color: #16a34a; }
+.status-badge-danger { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
+.status-badge-info { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
+.status-badge-warning { background: rgba(202, 138, 4, 0.12); color: #ca8a04; }
+.status-badge-secondary { background: rgba(100, 116, 139, 0.12); color: #64748b; }
+
+.toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggle-btn-on { background: rgba(22, 163, 74, 0.12); border-color: rgba(22, 163, 74, 0.3); color: #16a34a; }
+.toggle-btn-off { background: rgba(220, 38, 38, 0.12); border-color: rgba(220, 38, 38, 0.3); color: #dc2626; }
+.toggle-btn:hover { transform: translateY(-1px); }
+
+.info-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    color: #1d4ed8;
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    margin-bottom: 0.5rem;
+    transition: background 0.2s;
+}
+
+.list-item:hover { background: rgba(255, 255, 255, 0.85); }
+
+.modal-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.modal-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: saturate(130%) blur(14px);
+    border-radius: 18px;
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    width: 90%;
+    max-width: 560px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-card-lg { max-width: 800px; }
+
+.modal-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.modal-card-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+
+.modal-card-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.06);
+    color: #64748b;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.modal-card-close:hover { background: rgba(15, 23, 42, 0.12); }
+
+.modal-card-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+}

@@ -1,62 +1,63 @@
-<style>
-
+<style scoped>
+.cron-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  margin-bottom: 0.5rem;
+  transition: background 0.2s;
+}
+.cron-item:hover { background: rgba(255, 255, 255, 0.88); }
+.cron-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.cron-desc { flex: 1; font-size: 0.9rem; color: #0f172a; }
+.cron-target {
+  font-size: 0.82rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  font-weight: 600;
+}
 </style>
 
 <template>
-  <center>
-    <RouterLink style="width: 50%" to="/bot" type="button" class="btn btn-lg btn-block btn-outline-success">返回个人首页
-    </RouterLink>
-  </center>
-  <hr>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      <div class="col">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <button id="b2" class="nav-link">cron任务列表</button>
-          </li>
-        </ul>
-        <div>
-          <br>
-          <div id="c-div">
-            <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="input-group mb-3">
-                  <RouterLink to="/cron" type="button" class="btn btn-primary btn-lg btn-block">添加</RouterLink>
-                </div>
-              </li>
-              <li v-for="(e,i) in arr1"
-                  class="list-group-item d-flex justify-content-between align-items-center">
-                <img :src="e.icon" style="width: 45px"
-                     class=" img-thumbnail rounded float-left">
-                {{ e.desc }} 发送
-                <span class="badge badge-pill">
-                               {{ e.msg }}
-                            </span>
-                到
-                <span class="badge badge-pill">
-                               {{ e.targetId }}
-                            </span>
-                <span class="badge badge-pill">
-                                <button v-on:click="del(e.id)" type="button" class="btn btn-danger">删除</button>
-                            </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+  <RouterLink to="/bot" class="back-link">← 返回个人首页</RouterLink>
+
+  <div class="page-card">
+    <h1 class="page-title">Cron定时任务</h1>
+
+    <div style="text-align:center; margin-bottom:1rem;">
+      <RouterLink to="/cron" class="action-btn action-btn-primary">添加任务</RouterLink>
     </div>
+
+    <div v-for="e in arr1" :key="e.id" class="cron-item">
+      <img :src="e.icon" class="cron-icon" alt="头像">
+      <span class="cron-desc">{{ e.desc }} 发送 <strong>{{ e.msg }}</strong></span>
+      <span class="cron-target">到 {{ e.targetId }}</span>
+      <button class="action-btn action-btn-danger" @click="del(e.id)">删除</button>
+    </div>
+
+    <div v-if="arr1.length === 0" style="text-align:center;color:#94a3b8;padding:2rem 0;">暂无定时任务</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "@/axios_in";
-import {RouterLink} from "vue-router";
 
-let arr1 = ref([])
+/** 定时任务列表 */
+let arr1 = ref<any[]>([])
 
-onMounted(()=>{
+onMounted(() => {
   axios.get("/api/cron-list").then(function (response) {
     arr1.value = response.data
   }).catch(function (err) {
@@ -64,7 +65,11 @@ onMounted(()=>{
   })
 })
 
-function del(id) {
+/**
+ * 删除指定定时任务
+ * @param id 任务ID
+ */
+function del(id: number) {
   axios.get("/api/cron-del?id=" + id).then(function (response) {
     arr1.value = response.data;
   }).catch(function (err) {
