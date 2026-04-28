@@ -2,6 +2,10 @@
 import {RouterView, useRoute} from 'vue-router'
 import router from "@/router";
 import {ref, computed} from "vue";
+import {useWallpaper} from "@/composables/useWallpaper";
+
+/** 应用启动时恢复用户自定义壁纸 */
+useWallpaper()
 
 /** 导航栏菜单项配置 */
 const navItems = [
