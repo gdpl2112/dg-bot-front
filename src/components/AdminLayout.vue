@@ -19,6 +19,7 @@ const mobileMenuOpen = ref(false)
 
 /** 用户角色（admin/user） */
 const userRole = ref('')
+const userIcon = ref('')
 
 /** 侧边栏菜单配置（连接配置仅管理员可见） */
 const allMenuItems = [
@@ -88,6 +89,7 @@ onMounted(() => {
   document.body.classList.add('admin-body')
   axios.get('/api/user').then(response => {
     userRole.value = response.data.role || 'user'
+    userIcon.value = response.data.icon || ''
   }).catch(() => {
     userRole.value = 'user'
   })
@@ -108,7 +110,7 @@ onUnmounted(() => {
     <aside class="admin-sidebar" :class="{ 'mobile-open': mobileMenuOpen }">
       <!-- Logo区域 -->
       <div class="sidebar-header">
-        <img class="sidebar-logo" src="http://kloping.top/icon.jpg" alt="Logo">
+        <img class="sidebar-logo" :src="userIcon || 'http://kloping.top/icon.jpg'" alt="Logo">
         <span v-if="!sidebarCollapsed" class="sidebar-title">Q云端代挂</span>
       </div>
 

@@ -2,12 +2,23 @@
 .conf-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 .conf-field {
   flex: 1;
-  min-width: 220px;
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.conf-field .input-card {
+  flex: 1;
+}
+.conf-field :deep(.input-card-label) {
+  width: 90px;
+  text-align: center;
+  justify-content: center;
 }
 .code-area {
   width: 100%;
@@ -60,14 +71,14 @@
           <span class="input-card-label">回复CD(秒)</span>
           <input type="number" min="1" v-model="formData.cd0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('cd0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('cd0')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">复述前置</span>
           <input type="text" v-model="formData.retell">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('retell')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('retell')">修改</button>
       </div>
     </div>
 
@@ -77,14 +88,14 @@
           <span class="input-card-label">回复开启</span>
           <input type="text" v-model="formData.open0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('open0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('open0')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">回复关闭</span>
           <input type="text" v-model="formData.close0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('close0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('close0')">修改</button>
       </div>
     </div>
 
@@ -94,14 +105,14 @@
           <span class="input-card-label">调用开启</span>
           <input type="text" v-model="formData.open1">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('open1')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('open1')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">调用关闭</span>
           <input type="text" v-model="formData.close1">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('close1')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('close1')">修改</button>
       </div>
     </div>
 
@@ -113,14 +124,14 @@
           <span class="input-card-label">监听发送到</span>
           <input type="text" v-model="formData.rsid">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('rsid')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('rsid')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">状态查看</span>
           <input type="text" v-model="formData.status0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('status0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('status0')">修改</button>
       </div>
     </div>
 
@@ -130,14 +141,14 @@
           <span class="input-card-label">添词</span>
           <input type="text" v-model="formData.add0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('add0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('add0')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">添加时取消</span>
           <input type="text" v-model="formData.cancel0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('cancel0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('cancel0')">修改</button>
       </div>
     </div>
 
@@ -147,14 +158,14 @@
           <span class="input-card-label">查词</span>
           <input type="text" v-model="formData.select0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('select0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('select0')">修改</button>
       </div>
       <div class="conf-field">
         <div class="input-card">
           <span class="input-card-label">删词</span>
           <input type="text" v-model="formData.del0">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('del0')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('del0')">修改</button>
       </div>
     </div>
 
@@ -168,7 +179,7 @@
           <span class="input-card-label">通知</span>
           <input type="text" v-model="formData.nu">
         </div>
-        <button class="action-btn action-btn-outline" style="margin-top:0.4rem" @click="modify('nu')">修改</button>
+        <button class="action-btn action-btn-outline" @click="modify('nu')">修改</button>
       </div>
     </div>
 

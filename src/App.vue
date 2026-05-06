@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import {RouterView, useRoute} from 'vue-router'
 import router from "@/router";
-import {ref, computed} from "vue";
+import {ref, computed, onMounted} from "vue";
 import {useWallpaper} from "@/composables/useWallpaper";
+import {globalUser, refreshGlobalUser} from "@/composables/useUser";
 
 /** 应用启动时恢复用户自定义壁纸 */
 useWallpaper()
+
+/** 获取用户信息并更新全局状态 */
+onMounted(() => {
+  refreshGlobalUser()
+})
 
 /** 导航栏菜单项配置 */
 const navItems = [
@@ -55,7 +61,7 @@ function pushRoute(route: string) {
     <nav class="app-navbar">
       <div class="nav-header">
         <button class="brand-button" type="button" aria-label="返回首页" @click="pushRoute('/')">
-          <img class="nav-logo" src="http://kloping.top/icon.jpg" alt="qq">
+          <img class="nav-logo" :src="globalUser.icon || 'http://kloping.top/icon.jpg'" alt="qq">
           <span class="brand-text">Q云端代挂</span>
         </button>
         <button class="navbar-toggler" type="button" :aria-expanded="navExpanded"
@@ -98,7 +104,7 @@ function pushRoute(route: string) {
     <footer class="app-footer tm-0">
       <div class="footer-content">
         <p>Powered by GitHub@<strong>kloping</strong></p>
-        <p>更新时间 <strong>26/04/29</strong></p>
+        <p>更新时间 <strong>26/05/06</strong></p>
       </div>
     </footer>
   </template>
