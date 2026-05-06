@@ -282,6 +282,11 @@
       </div>
       <div class="feature-card">
         <span class="feature-count">—</span>
+        <span class="feature-label">AI管理</span>
+        <RouterLink to="/ai-conf" class="action-btn action-btn-outline feature-link">管理</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">—</span>
         <span class="feature-label">V11功能</span>
         <RouterLink to="/v11c" class="action-btn action-btn-outline feature-link">管理</RouterLink>
       </div>

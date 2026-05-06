@@ -8,6 +8,7 @@ import AdminLayout from '../components/AdminLayout.vue'
 import manager from '../components/manager.vue'
 import bot from '../components/bot.vue'
 import conf from '../components/conf.vue'
+import aiConf from '../components/ai-conf.vue'
 import cronList from '@/components/cron-list.vue'
 import cron from '@/components/cron.vue'
 import passive from '../components/passive.vue'
@@ -48,6 +49,10 @@ const router = createRouter({
                     path: 'conf',
                     name: 'conf',
                     component: conf,
+                }, {
+                    path: 'ai-conf',
+                    name: 'ai-conf',
+                    component: aiConf,
                 }, {
                     path: 'manager',
                     name: 'manager',

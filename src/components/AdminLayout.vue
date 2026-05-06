@@ -25,6 +25,7 @@ const userIcon = ref('')
 const allMenuItems = [
   {label: '个人中心', route: '/bot', icon: '👤', adminOnly: false},
   {label: '配置中心', route: '/conf', icon: '⚙️', adminOnly: false},
+  {label: 'AI管理', route: '/ai-conf', icon: '🤖', adminOnly: false},
   {label: '管理员管理', route: '/manager', icon: '🛡️', adminOnly: false},
   {label: '定时任务', route: '/cron-list', icon: '⏰', adminOnly: false},
   {label: '回复词', route: '/passive', icon: '💬', adminOnly: false},
