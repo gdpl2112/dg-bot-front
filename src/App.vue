@@ -61,7 +61,7 @@ function pushRoute(route: string) {
     <nav class="app-navbar">
       <div class="nav-header">
         <button class="brand-button" type="button" aria-label="返回首页" @click="pushRoute('/')">
-          <img class="nav-logo" :src="globalUser.icon || 'http://kloping.top/icon.jpg'" alt="qq">
+          <img class="nav-logo" :src="globalUser.icon || 'https://kloping.top/icon.jpg'" alt="qq">
           <span class="brand-text">Q云端代挂</span>
         </button>
         <button class="navbar-toggler" type="button" :aria-expanded="navExpanded"
