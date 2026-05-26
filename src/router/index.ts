@@ -17,6 +17,7 @@ import callapi from '../components/callapi.vue'
 import um from '../components/um.vue'
 import v11c from '../components/v11conf.vue'
 import connConf from '../components/conn-conf.vue'
+import manageRecords from '../components/manage-records.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,6 +90,10 @@ const router = createRouter({
                     path: 'conn-conf',
                     name: 'conn-conf',
                     component: connConf,
+                }, {
+                    path: 'manage-records',
+                    name: 'manage-records',
+                    component: manageRecords,
                 },
             ]
         },

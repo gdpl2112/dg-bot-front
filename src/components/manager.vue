@@ -101,6 +101,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.3rem;
 }
+.toggle-group-5 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.toggle-group-5 .toggle-btn {
+  padding: 0.25rem 0.2rem;
+  font-size: 0.75rem;
+}
 </style>
 
 <template>
@@ -136,7 +143,8 @@
         按钮依次为 <strong style="color:#16a34a">API调用</strong> ·
         <strong style="color:#15803d">撤回监听</strong> ·
         <strong style="color:#ca8a04">被动回复</strong> ·
-        <strong style="color:#2563eb">内置功能</strong> 的控制开关，红色=已关闭，默认开启
+        <strong style="color:#2563eb">内置功能</strong> ·
+        <strong style="color:#7c3aed">记录数据</strong> 的控制开关，红色=已关闭，默认开启
       </div>
       <div class="search-row">
         <input type="text" v-model="gSearch" placeholder="检索群..." @input="filterGroups">
@@ -145,7 +153,7 @@
         <div v-for="e in glist" :key="e.tid" class="contact-card">
           <img class="contact-avatar" :src="e.icon" alt="头像">
           <div class="contact-name">{{ e.name }}</div>
-          <div class="toggle-group">
+          <div class="toggle-group toggle-group-5">
             <button :class="['toggle-btn', e.k0 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm0(e.tid)" title="API调用开关">
               {{ e.k0 ? 'API开' : 'API关' }}
             </button>
@@ -157,6 +165,9 @@
             </button>
             <button :class="['toggle-btn', e.k3 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm3(e.tid)" title="内置功能开关">
               {{ e.k3 ? '内开' : '内关' }}
+            </button>
+            <button :class="['toggle-btn', e.k4 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm4(e.tid)" title="记录数据开关">
+              {{ e.k4 ? '记开' : '记关' }}
             </button>
           </div>
         </div>
@@ -325,6 +336,13 @@ function gm3(tid: number) {
   axios.get("/api/gc3?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e: any) => { if (e.tid === tid) e.k3 = !e.k3; })
+    }
+  }).catch(function (err) { alert(err); })
+}
+function gm4(tid: number) {
+  axios.get("/api/gc4?tid=" + tid).then(function (response) {
+    if (response.data === true) {
+      glist.value.forEach((e: any) => { if (e.tid === tid) e.k4 = !e.k4; })
     }
   }).catch(function (err) { alert(err); })
 }

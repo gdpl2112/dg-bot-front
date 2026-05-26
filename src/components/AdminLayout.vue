@@ -33,6 +33,7 @@ const allMenuItems = [
   {label: '内置扩展', route: '/optsv', icon: '📦', adminOnly: false},
   {label: 'V11功能', route: '/v11c', icon: '🔧', adminOnly: false},
   {label: '连接配置', route: '/conn-conf', icon: '🌐', adminOnly: true},
+  {label: '管理记录', route: '/manage-records', icon: '📋', adminOnly: false},
 ]
 
 /** 根据角色过滤后的菜单项 */

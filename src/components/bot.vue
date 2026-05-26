@@ -287,6 +287,11 @@
       </div>
       <div class="feature-card">
         <span class="feature-count">—</span>
+        <span class="feature-label">管理记录</span>
+        <RouterLink to="/manage-records" class="action-btn action-btn-outline feature-link">查看</RouterLink>
+      </div>
+      <div class="feature-card">
+        <span class="feature-count">—</span>
         <span class="feature-label">V11功能</span>
         <RouterLink to="/v11c" class="action-btn action-btn-outline feature-link">管理</RouterLink>
       </div>
