@@ -214,6 +214,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import axios from '@/axios_in'
+import { ElMessage } from 'element-plus'
 
 /** 当前激活标签 */
 const activeTab = ref<'kick' | 'mute'>('kick')
@@ -329,11 +330,11 @@ function loadData() {
   axios.get(`${base}?${buildParams({ page: page.value, size: PAGE_SIZE })}`).then(res => {
     records.value = res.data.list || []
     total.value = res.data.total || 0
-  }).catch(err => { alert(err) })
+  }).catch(err => { ElMessage.error(String(err)) })
 
   axios.get(`${base}/top-operators?${buildParams({ limit: 10 })}`).then(res => {
     topOps.value = res.data || []
-  }).catch(err => { alert(err) })
+  }).catch(err => { ElMessage.error(String(err)) })
 }
 
 /**

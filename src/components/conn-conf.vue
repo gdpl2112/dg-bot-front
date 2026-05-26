@@ -54,28 +54,9 @@
 .conn-table tr:hover td { background: rgba(248, 250, 252, 0.6); }
 .pagination-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: center;
   margin-top: 0.75rem;
 }
-.page-btn {
-  padding: 0.3rem 0.6rem;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.page-btn-active {
-  background: rgba(37, 99, 235, 0.12);
-  border-color: rgba(37, 99, 235, 0.3);
-  color: #2563eb;
-  font-weight: 600;
-}
-.page-btn:disabled { opacity: 0.4; cursor: default; }
 </style>
 
 <template>
@@ -103,10 +84,10 @@
           </div>
           <div class="conn-form-field">
             <label>连接类型 *</label>
-            <select v-model="currentConfig.type" required>
-              <option value="ws">WebSocket (ws)</option>
-              <option value="se">Server-Sent Events (se)</option>
-            </select>
+            <el-select v-model="currentConfig.type" style="width:100%">
+              <el-option value="ws" label="WebSocket (ws)" />
+              <el-option value="se" label="Server-Sent Events (se)" />
+            </el-select>
           </div>
           <div class="conn-form-field">
             <label>心跳间隔(秒)</label>
@@ -173,20 +154,15 @@
       </div>
 
       <div class="pagination-row">
-        <span style="font-size:0.82rem;color:#64748b">共 {{ pagination.total }} 条</span>
-        <div style="display:flex;gap:0.25rem;align-items:center">
-          <button class="page-btn" :disabled="pagination.current === 1" @click="changePage(pagination.current - 1)">上一页</button>
-          <button v-for="page in pageNumbers" :key="page"
-                  :class="['page-btn', page === pagination.current ? 'page-btn-active' : '']"
-                  @click="changePage(page)">{{ page }}</button>
-          <button class="page-btn" :disabled="pagination.current === pagination.pages" @click="changePage(pagination.current + 1)">下一页</button>
-        </div>
-        <select v-model="pagination.size" @change="changePageSize"
-                style="border:1px solid rgba(15,23,42,0.1);border-radius:8px;padding:0.25rem 0.5rem;font-size:0.82rem;outline:none">
-          <option value="5">5条/页</option>
-          <option value="10">10条/页</option>
-          <option value="20">20条/页</option>
-        </select>
+        <el-pagination
+          v-model:current-page="pagination.current"
+          v-model:page-size="pagination.size"
+          :total="pagination.total"
+          :page-sizes="[5, 10, 20]"
+          layout="total, sizes, prev, pager, next"
+          @current-change="loadConfigs"
+          @size-change="onPageSizeChange"
+        />
       </div>
     </div>
   </div>
@@ -195,6 +171,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
 import axios from "@/axios_in";
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 /** 连接配置项接口 */
 interface ConnConfig {
@@ -248,29 +225,6 @@ const filteredConfigs = computed(() => {
   );
 });
 
-/** 计算分页页码范围 */
-const pageNumbers = computed(() => {
-  const pages: number[] = [];
-  const currentPage = pagination.current;
-  const totalPages = pagination.pages;
-  
-  let start = Math.max(1, currentPage - 2);
-  let end = Math.min(totalPages, currentPage + 2);
-  
-  if (end - start < 4) {
-    if (start === 1) {
-      end = Math.min(totalPages, start + 4);
-    } else {
-      start = Math.max(1, end - 4);
-    }
-  }
-  
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-  
-  return pages;
-});
 
 /** 加载配置列表（分页） */
 const loadConfigs = () => {
@@ -288,19 +242,19 @@ const loadConfigs = () => {
       pagination.current = data.data.current;
       pagination.pages = data.data.pages;
     } else {
-      alert("加载配置失败: " + data.message);
+      ElMessage.error("加载配置失败: " + data.message);
     }
   })
   .catch(error => {
     console.error("加载配置时出错:", error);
-    alert("加载配置失败，请查看控制台了解详细信息");
+    ElMessage.error("加载配置失败");
   });
 };
 
 /** 保存配置（新增或更新） */
 const saveConfig = () => {
   if (!currentConfig.qid || !currentConfig.ip || !currentConfig.port || !currentConfig.type) {
-    alert("请填写必填字段");
+    ElMessage.warning("请填写必填字段");
     return;
   }
 
@@ -312,16 +266,16 @@ const saveConfig = () => {
       .then(response => {
         const data = response.data;
         if (data.code === 200) {
-          alert("配置更新成功");
+          ElMessage.success("配置更新成功");
           resetForm();
           loadConfigs();
         } else {
-          alert("配置更新失败: " + data.message);
+          ElMessage.error("配置更新失败: " + data.message);
         }
       })
       .catch(error => {
         console.error("更新配置时出错:", error);
-        alert("配置更新失败，请查看控制台了解详细信息");
+        ElMessage.error("配置更新失败");
       });
   } else {
     // 新增配置
@@ -329,16 +283,16 @@ const saveConfig = () => {
       .then(response => {
         const data = response.data;
         if (data.code === 200) {
-          alert("配置添加成功");
+          ElMessage.success("配置添加成功");
           resetForm();
           loadConfigs();
         } else {
-          alert("配置添加失败: " + data.message);
+          ElMessage.error("配置添加失败: " + data.message);
         }
       })
       .catch(error => {
         console.error("添加配置时出错:", error);
-        alert("配置添加失败，请查看控制台了解详细信息");
+        ElMessage.error("配置添加失败");
       });
   }
 };
@@ -357,26 +311,28 @@ const editConfig = (config: ConnConfig) => {
  * 删除指定配置
  * @param id 配置ID(Bot QQ号)
  */
-const deleteConfig = (id: string) => {
-  if (!confirm("确定要删除这个配置吗？")) {
+const deleteConfig = async (id: string) => {
+  try {
+    await ElMessageBox.confirm("确定要删除这个配置吗？", "提示", { type: "warning" });
+  } catch {
     return;
   }
-  
+
   axios.post("/api/conn-config/delete", null, {
     params: { id }
   })
   .then(response => {
     const data = response.data;
     if (data.code === 200) {
-      alert("配置删除成功");
+      ElMessage.success("配置删除成功");
       loadConfigs();
     } else {
-      alert("配置删除失败: " + data.message);
+      ElMessage.error("配置删除失败: " + data.message);
     }
   })
   .catch(error => {
     console.error("删除配置时出错:", error);
-    alert("配置删除失败，请查看控制台了解详细信息");
+    ElMessage.error("配置删除失败");
   });
 };
 
@@ -393,19 +349,8 @@ const resetForm = () => {
   isEditing.value = false;
 };
 
-/**
- * 切换分页页码
- * @param page 目标页码
- */
-const changePage = (page: number) => {
-  if (page >= 1 && page <= pagination.pages) {
-    pagination.current = page;
-    loadConfigs();
-  }
-};
-
-/** 更改每页条数并重新加载 */
-const changePageSize = () => {
+/** 每页条数变更时重置到第一页 */
+const onPageSizeChange = () => {
   pagination.current = 1;
   loadConfigs();
 };
