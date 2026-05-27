@@ -540,7 +540,7 @@ const activeGroupChips = computed<{ gid: string; name: string; icon: string }[]>
   for (const gid of recordGroupIds.value) {
     if (!seen.has(gid)) {
       seen.add(gid)
-      result.push({ gid, name: gid, icon: '' })
+      result.push({ gid, name: gid, icon: `https://p.qlogo.cn/gh/${gid}/${gid}/0` })
     }
   }
   return result
