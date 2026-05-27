@@ -29,11 +29,11 @@ const navExpanded = ref(false)
 const currentRoute = useRoute()
 
 /**
- * 判断当前是否为后台管理页面
- * 管理页面使用 AdminLayout 自带布局，不显示公开导航栏和页脚
+ * 判断当前是否为后台管理页面或独立页面
+ * 这两类页面均不显示公开导航栏和页脚，由各自组件自行处理布局
  */
 const isAdminPage = computed(() => {
-  return currentRoute.matched.some(record => record.meta.admin)
+  return currentRoute.matched.some(record => record.meta.admin || record.meta.standalone)
 })
 
 /**

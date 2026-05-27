@@ -18,6 +18,7 @@ import um from '../components/um.vue'
 import v11c from '../components/v11conf.vue'
 import connConf from '../components/conn-conf.vue'
 import manageRecords from '../components/manage-records.vue'
+import manageView from '../views/manage-view.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,11 @@ const router = createRouter({
             name: 'login',
             component: login,
             meta: { admin: false }
+        }, {
+            path: '/manage',
+            name: 'manage',
+            component: manageView,
+            meta: { admin: false, standalone: true }
         }, {
             path: '/',
             component: AdminLayout,

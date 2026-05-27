@@ -157,18 +157,18 @@
       <button :class="['tab-btn', activeTab === 'approve' ? 'tab-btn-active' : '']" @click="switchTab('approve')">批准入群</button>
     </div>
 
-    <!-- 群快捷选择 -->
-    <div class="group-chips" v-if="groupList.some(g => g.k4)">
+    <!-- 群快捷选择：合并 groupList(k4) 与记录中出现的群号 -->
+    <div class="group-chips" v-if="activeGroupChips.length > 0">
       <button
         :class="['group-chip', filterGid === '' ? 'group-chip-active' : '']"
         @click="selectGroup('')"
       >全部</button>
       <button
-        v-for="g in groupList.filter(g => g.k4)" :key="g.tid"
-        :class="['group-chip', filterGid === String(g.tid) ? 'group-chip-active' : '']"
-        @click="selectGroup(String(g.tid))"
+        v-for="g in activeGroupChips" :key="g.gid"
+        :class="['group-chip', filterGid === g.gid ? 'group-chip-active' : '']"
+        @click="selectGroup(g.gid)"
       >
-        <img class="group-chip-avatar" :src="g.icon" alt="">
+        <img v-if="g.icon" class="group-chip-avatar" :src="g.icon" alt="">
         {{ g.name }}
       </button>
     </div>
@@ -334,6 +334,43 @@ const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]
 
 /** 总页数（至少为1） */
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
+
+/** 从当前记录中提取去重群号，用于快捷筛选补充 */
+const recordGroupIds = computed<string[]>(() => {
+  const ids = new Set<string>()
+  for (const r of records.value) {
+    if (r.group_id) ids.add(String(r.group_id))
+  }
+  return Array.from(ids).sort()
+})
+
+/**
+ * 合并 groupList(k4) 与记录中的群号，生成最终快捷筛选列表
+ * groupList 中已知的群优先展示（含名称和头像），记录中额外出现的群以群号兜底
+ * @return 群筛选项数组 { gid, name, icon }
+ */
+const activeGroupChips = computed<{ gid: string; name: string; icon: string }[]>(() => {
+  const result: { gid: string; name: string; icon: string }[] = []
+  const seen = new Set<string>()
+  // 优先展示 groupList 中有 k4 标记的群（含名称和头像）
+  for (const g of groupList.value) {
+    if (g.k4) {
+      const gid = String(g.tid)
+      if (!seen.has(gid)) {
+        seen.add(gid)
+        result.push({ gid, name: g.name, icon: g.icon })
+      }
+    }
+  }
+  // 补充当前记录中出现但 groupList 未收录的群，以群号作为显示名称
+  for (const gid of recordGroupIds.value) {
+    if (!seen.has(gid)) {
+      seen.add(gid)
+      result.push({ gid, name: gid, icon: '' })
+    }
+  }
+  return result
+})
 
 onMounted(() => {
   loadData()
