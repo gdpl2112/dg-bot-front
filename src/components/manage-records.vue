@@ -109,6 +109,31 @@
   font-size: 0.9rem;
 }
 
+.group-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.group-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.group-chip:hover { background: rgba(255,255,255,0.95); border-color: rgba(37,99,235,0.3); color: #2563eb; }
+.group-chip-active { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.35); color: #2563eb; }
+.group-chip-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
 .pagination-row {
   display: flex;
   align-items: center;
@@ -129,6 +154,23 @@
     <div class="tab-bar">
       <button :class="['tab-btn', activeTab === 'kick' ? 'tab-btn-active' : '']" @click="switchTab('kick')">踢人记录</button>
       <button :class="['tab-btn', activeTab === 'mute' ? 'tab-btn-active' : '']" @click="switchTab('mute')">禁言记录</button>
+      <button :class="['tab-btn', activeTab === 'approve' ? 'tab-btn-active' : '']" @click="switchTab('approve')">批准入群</button>
+    </div>
+
+    <!-- 群快捷选择 -->
+    <div class="group-chips" v-if="groupList.some(g => g.k4)">
+      <button
+        :class="['group-chip', filterGid === '' ? 'group-chip-active' : '']"
+        @click="selectGroup('')"
+      >全部</button>
+      <button
+        v-for="g in groupList.filter(g => g.k4)" :key="g.tid"
+        :class="['group-chip', filterGid === String(g.tid) ? 'group-chip-active' : '']"
+        @click="selectGroup(String(g.tid))"
+      >
+        <img class="group-chip-avatar" :src="g.icon" alt="">
+        {{ g.name }}
+      </button>
     </div>
 
     <!-- 筛选条件 -->
@@ -182,6 +224,21 @@
       </div>
     </template>
 
+    <!-- 批准入群记录条目 -->
+    <template v-if="activeTab === 'approve'">
+      <div v-for="e in records" :key="e.id" class="record-item">
+        <img class="record-avatar" :src="'https://q1.qlogo.cn/g?b=qq&nk=' + e.req_id + '&s=100'" alt="头像">
+        <div class="record-info">
+          <div class="record-ids">
+            申请：{{ e.req_id }}
+            <span class="record-op">by {{ e.operator_id }}</span>
+          </div>
+          <div class="record-meta">群：{{ e.group_id }}</div>
+        </div>
+        <div class="record-time">{{ formatTime(e.time) }}</div>
+      </div>
+    </template>
+
     <!-- 禁言记录条目 -->
     <template v-if="activeTab === 'mute'">
       <div v-for="e in records" :key="e.id" class="record-item">
@@ -217,13 +274,19 @@ import axios from '@/axios_in'
 import { ElMessage } from 'element-plus'
 
 /** 当前激活标签 */
-const activeTab = ref<'kick' | 'mute'>('kick')
+const activeTab = ref<'kick' | 'mute' | 'approve'>('kick')
 
 /** 筛选条件：群号 */
 const filterGid = ref('')
 
-/** 时间范围选择器绑定值，元素为毫秒时间戳字符串，null 表示未选择 */
-const dateRange = ref<[string, string] | null>(null)
+/** 时间范围选择器绑定值，value-format="x" 返回毫秒时间戳数字，null 表示未选择 */
+const dateRange = ref<[number, number] | null>((() => {
+  const end = new Date()
+  const start = new Date()
+  start.setDate(start.getDate() - 30)
+  start.setHours(0, 0, 0, 0)
+  return [start.getTime(), end.getTime()]
+})())
 
 /** 日期快捷选项 */
 const dateShortcuts = [
@@ -266,18 +329,25 @@ const PAGE_SIZE = 20
 /** 操作者排行列表 */
 const topOps = ref<any[]>([])
 
+/** 群列表，用于快捷筛选 chip */
+const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]>([])
+
 /** 总页数（至少为1） */
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
 
 onMounted(() => {
   loadData()
+  // 加载群列表用于快捷筛选
+  axios.get('/api/glist').then(res => {
+    groupList.value = res.data || []
+  }).catch(() => {})
 })
 
 /**
  * 切换标签页，重置到第一页并重新加载
  * @param tab 目标标签
  */
-function switchTab(tab: 'kick' | 'mute') {
+function switchTab(tab: 'kick' | 'mute' | 'approve') {
   activeTab.value = tab
   page.value = 1
   loadData()
@@ -289,7 +359,8 @@ function switchTab(tab: 'kick' | 'mute') {
  * @return URLSearchParams 序列化字符串
  */
 function buildParams(extra: Record<string, string | number> = {}): string {
-  const gid = filterGid.value.trim() || '0'
+  // 去除可能存在的非数字前缀（如 "g1041541077" → "1041541077"）
+  const gid = filterGid.value.trim().replace(/\D/g, '') || '0'
   // value-format="x" 返回毫秒时间戳字符串，未选择则为 0
   const startTime = dateRange.value ? dateRange.value[0] : '0'
   const endTime = dateRange.value ? dateRange.value[1] : '0'
@@ -300,6 +371,16 @@ function buildParams(extra: Record<string, string | number> = {}): string {
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, String(v)]))
   })
   return params.toString()
+}
+
+/**
+ * 快捷选择群号并触发查询
+ * @param tid 群号字符串，空字符串表示全部
+ */
+function selectGroup(tid: string) {
+  filterGid.value = tid
+  page.value = 1
+  loadData()
 }
 
 /**
@@ -324,7 +405,9 @@ function resetFilter() {
  * 加载当前标签的分页记录与操作者排行
  */
 function loadData() {
-  const base = activeTab.value === 'kick' ? '/api/manage/kick' : '/api/manage/mute'
+  const base = activeTab.value === 'kick' ? '/api/manage/kick'
+    : activeTab.value === 'mute' ? '/api/manage/mute'
+    : '/api/manage/approve'
 
   // 并发加载分页数据与排行榜
   axios.get(`${base}?${buildParams({ page: page.value, size: PAGE_SIZE })}`).then(res => {
