@@ -337,6 +337,22 @@
           <span class="input-card-label">群号</span>
           <input type="text" v-model="filterGid" placeholder="不填=全部">
         </div>
+        <el-select
+          v-model="filterOperator"
+          filterable
+          clearable
+          placeholder="操作者（全部）"
+          style="flex:1; min-width:200px;"
+          @change="doSearch"
+          @clear="doSearch"
+        >
+          <el-option
+            v-for="op in operatorOptions"
+            :key="op.id"
+            :value="op.id"
+            :label="op.id + (op.role === 'owner' ? '（群主）' : op.role === 'admin' ? '（管理）' : '')"
+          />
+        </el-select>
         <el-date-picker
           v-model="dateRange"
           type="datetimerange"
@@ -353,7 +369,7 @@
 
       <!-- 操作者排行 -->
       <div class="rank-section" v-if="topOps.length > 0">
-        <div class="rank-title">操作者排行 TOP 10</div>
+        <div class="rank-title">操作者排行 TOP 20</div>
         <div class="rank-list">
           <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-item">
             <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
@@ -453,6 +469,15 @@ const activeTab = ref<'kick' | 'mute' | 'approve'>('kick')
 /** 筛选条件：群号 */
 const filterGid = ref('')
 
+/** 筛选条件：操作者 ID（空表示全部） */
+const filterOperator = ref('')
+
+/** 操作者下拉选项：已记录操作者与实际群管理/群主合并 [{id, recorded, role}] */
+const operatorOptions = ref<{ id: string; recorded: boolean; role: string }[]>([])
+
+/** 所有已记录过数据的群号（来自 /api/manage/groups），用于群快捷筛选补全 */
+const recordedGroupIds = ref<string[]>([])
+
 /** 时间范围选择器绑定值，value-format="x" 返回毫秒时间戳数字 */
 const dateRange = ref<[number, number] | null>((() => {
   const end = new Date()
@@ -509,41 +534,25 @@ const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]
 /** 总页数（至少为1） */
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
 
-/** 从当前记录中提取去重群号，用于快捷筛选补充 */
-const recordGroupIds = computed<string[]>(() => {
-  const ids = new Set<string>()
-  for (const r of records.value) {
-    if (r.group_id) ids.add(String(r.group_id))
-  }
-  return Array.from(ids).sort()
-})
-
 /**
- * 合并 groupList(k4) 与记录中的群号，生成最终快捷筛选列表
- * groupList 中已知的群优先展示（含名称和头像），记录中额外出现的群以群号兜底
+ * 群快捷筛选列表：以「所有已记录过数据的群号」(/api/manage/groups) 为准，
+ * 名称/头像优先从 groupList 取，缺失时以群号兜底。
+ * 修复点：原先只能依赖 bot 在线群列表 + 当前页记录中的群号，会漏掉历史群导致无法选择过滤。
  * @return 群筛选项数组 { gid, name, icon }
  */
 const activeGroupChips = computed<{ gid: string; name: string; icon: string }[]>(() => {
-  const result: { gid: string; name: string; icon: string }[] = []
-  const seen = new Set<string>()
-  // 优先展示 groupList 中有 k4 标记的群（含名称和头像）
+  const nameMap = new Map<string, { name: string; icon: string }>()
   for (const g of groupList.value) {
-    if (g.k4) {
-      const gid = String(g.tid)
-      if (!seen.has(gid)) {
-        seen.add(gid)
-        result.push({ gid, name: g.name, icon: g.icon })
-      }
-    }
+    nameMap.set(String(g.tid), { name: g.name, icon: g.icon })
   }
-  // 补充当前记录中出现但 groupList 未收录的群，以群号作为显示名称
-  for (const gid of recordGroupIds.value) {
-    if (!seen.has(gid)) {
-      seen.add(gid)
-      result.push({ gid, name: gid, icon: `https://p.qlogo.cn/gh/${gid}/${gid}/0` })
+  return recordedGroupIds.value.map(gid => {
+    const info = nameMap.get(gid)
+    return {
+      gid,
+      name: info?.name || gid,
+      icon: info?.icon || `https://p.qlogo.cn/gh/${gid}/${gid}/0`,
     }
-  }
-  return result
+  })
 })
 
 /**
@@ -566,6 +575,8 @@ onMounted(() => {
   if (keyOk.value) {
     loadData()
     loadGroupList()
+    loadGroups()
+    loadOperators()
   }
 })
 
@@ -583,6 +594,8 @@ function submitKey() {
   keyInput.value = ''
   loadData()
   loadGroupList()
+  loadGroups()
+  loadOperators()
 }
 
 /**
@@ -594,6 +607,9 @@ function clearKey() {
   records.value = []
   topOps.value = []
   groupList.value = []
+  recordedGroupIds.value = []
+  operatorOptions.value = []
+  filterOperator.value = ''
 }
 
 /**
@@ -602,6 +618,26 @@ function clearKey() {
 function loadGroupList() {
   makeHttp().get('/api/glist').then(res => {
     groupList.value = res.data || []
+  }).catch(() => {})
+}
+
+/**
+ * 加载所有已记录过数据的群号，用于群快捷筛选补全（修复漏群 bug）
+ */
+function loadGroups() {
+  makeHttp().get('/api/manage/groups').then(res => {
+    recordedGroupIds.value = (res.data || []).map((x: any) => String(x))
+  }).catch(() => {})
+}
+
+/**
+ * 加载操作者下拉选项：已记录操作者与实际群管理/群主合并。
+ * 随当前群号过滤（gid>0 时仅取该群管理员）。
+ */
+function loadOperators() {
+  const gid = filterGid.value.trim().replace(/\D/g, '') || '0'
+  makeHttp().get(`/api/manage/operators?gid=${gid}`).then(res => {
+    operatorOptions.value = res.data || []
   }).catch(() => {})
 }
 
@@ -623,11 +659,14 @@ function switchTab(tab: 'kick' | 'mute' | 'approve') {
 function buildParams(extra: Record<string, string | number> = {}): string {
   // 去除可能存在的非数字前缀（如 "g1041541077" → "1041541077"）
   const gid = filterGid.value.trim().replace(/\D/g, '') || '0'
+  // 操作者 ID 过滤，空表示全部
+  const operator = filterOperator.value.trim().replace(/\D/g, '') || '0'
   // value-format="x" 返回毫秒时间戳字符串，未选择则为 0
   const startTime = dateRange.value ? dateRange.value[0] : '0'
   const endTime = dateRange.value ? dateRange.value[1] : '0'
   const params = new URLSearchParams({
     gid,
+    operator,
     startTime: String(startTime),
     endTime: String(endTime),
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, String(v)]))
@@ -643,6 +682,7 @@ function selectGroup(tid: string) {
   filterGid.value = tid
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -651,6 +691,7 @@ function selectGroup(tid: string) {
 function doSearch() {
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -658,9 +699,11 @@ function doSearch() {
  */
 function resetFilter() {
   filterGid.value = ''
+  filterOperator.value = ''
   dateRange.value = null
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -688,7 +731,7 @@ function loadData() {
     }
   })
 
-  http.get(`${base}/top-operators?${buildParams({ limit: 10 })}`).then(res => {
+  http.get(`${base}/top-operators?${buildParams({ limit: 20 })}`).then(res => {
     topOps.value = res.data || []
   }).catch(() => {})
 }
