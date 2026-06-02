@@ -316,6 +316,35 @@
   border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
 .pagination-info { font-size: 0.88rem; color: #64748b; }
+
+/* ───── 移动端适配 ───── */
+@media (max-width: 768px) {
+  .manage-outer { padding: 1rem 0.5rem; }
+  .manage-card { padding: 1rem 0.9rem; border-radius: 16px; }
+  .manage-title { font-size: 1.15rem; }
+  .manage-header { margin-bottom: 0.9rem; }
+
+  .tab-btn { padding: 0.5rem 0.7rem; font-size: 0.85rem; }
+
+  /* 筛选控件整行堆叠并占满宽度（!important 覆盖组件内联样式） */
+  .filter-row { gap: 0.5rem; }
+  .filter-row .input-card { flex: 1 1 100%; min-width: 0; }
+  .filter-row :deep(.el-select),
+  .filter-row :deep(.el-date-editor) {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .filter-row .action-btn { flex: 1 1 auto; }
+
+  /* 记录条目：时间换行到底部右对齐 */
+  .record-item { gap: 0.5rem; padding: 0.55rem 0.7rem; }
+  .record-time { width: 100%; text-align: right; }
+
+  .group-chip { font-size: 0.78rem; padding: 0.28rem 0.55rem; }
+  .rank-list { gap: 0.35rem; }
+  .rank-item { font-size: 0.8rem; padding: 0.3rem 0.55rem; }
+}
 </style>
 
 <template>
@@ -419,7 +448,7 @@
       </div>
 
       <!-- 操作者排行完整榜单弹窗（TOP20） -->
-      <el-dialog v-model="rankDialog" title="操作者排行 TOP 20" width="420px">
+      <el-dialog v-model="rankDialog" title="操作者排行 TOP 20" :width="rankDialogWidth">
         <div class="rank-dialog-list">
           <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-dialog-item">
             <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
@@ -494,7 +523,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
@@ -581,6 +610,15 @@ const topOps = ref<any[]>([])
 /** 操作者排行完整榜单弹窗显隐 */
 const rankDialog = ref(false)
 
+/** 窗口宽度，用于响应式（移动端弹窗宽度自适应） */
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+function onResize() {
+  windowWidth.value = window.innerWidth
+}
+
+/** 排行弹窗宽度：窄屏占满、桌面固定 420px */
+const rankDialogWidth = computed(() => (windowWidth.value <= 768 ? '92%' : '420px'))
+
 /** 群列表，用于快捷筛选 chip */
 const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]>([])
 
@@ -631,6 +669,11 @@ onMounted(() => {
     loadGroups()
     loadOperators()
   }
+  window.addEventListener('resize', onResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
 })
 
 /**
