@@ -199,12 +199,47 @@
   background: rgba(124, 58, 237, 0.05);
   border: 1px solid rgba(124, 58, 237, 0.12);
 }
+.rank-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
 .rank-title {
   font-size: 0.88rem;
   font-weight: 700;
   color: #7c3aed;
-  margin-bottom: 0.6rem;
 }
+.rank-more-btn {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  background: rgba(124, 58, 237, 0.08);
+  color: #7c3aed;
+  border-radius: 8px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.rank-more-btn:hover { background: rgba(124, 58, 237, 0.16); }
+.rank-dialog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.rank-dialog-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  font-size: 0.86rem;
+}
+.rank-dialog-item .rank-id { flex: 1; }
 .rank-list {
   display: flex;
   flex-wrap: wrap;
@@ -281,6 +316,35 @@
   border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
 .pagination-info { font-size: 0.88rem; color: #64748b; }
+
+/* ───── 移动端适配 ───── */
+@media (max-width: 768px) {
+  .manage-outer { padding: 1rem 0.5rem; }
+  .manage-card { padding: 1rem 0.9rem; border-radius: 16px; }
+  .manage-title { font-size: 1.15rem; }
+  .manage-header { margin-bottom: 0.9rem; }
+
+  .tab-btn { padding: 0.5rem 0.7rem; font-size: 0.85rem; }
+
+  /* 筛选控件整行堆叠并占满宽度（!important 覆盖组件内联样式） */
+  .filter-row { gap: 0.5rem; }
+  .filter-row .input-card { flex: 1 1 100%; min-width: 0; }
+  .filter-row :deep(.el-select),
+  .filter-row :deep(.el-date-editor) {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .filter-row .action-btn { flex: 1 1 auto; }
+
+  /* 记录条目：时间换行到底部右对齐 */
+  .record-item { gap: 0.5rem; padding: 0.55rem 0.7rem; }
+  .record-time { width: 100%; text-align: right; }
+
+  .group-chip { font-size: 0.78rem; padding: 0.28rem 0.55rem; }
+  .rank-list { gap: 0.35rem; }
+  .rank-item { font-size: 0.8rem; padding: 0.3rem 0.55rem; }
+}
 </style>
 
 <template>
@@ -337,6 +401,22 @@
           <span class="input-card-label">群号</span>
           <input type="text" v-model="filterGid" placeholder="不填=全部">
         </div>
+        <el-select
+          v-model="filterOperator"
+          filterable
+          clearable
+          placeholder="操作者（全部）"
+          style="flex:1; min-width:200px;"
+          @change="doSearch"
+          @clear="doSearch"
+        >
+          <el-option
+            v-for="op in operatorOptions"
+            :key="op.id"
+            :value="op.id"
+            :label="op.id + (op.role === 'owner' ? '（群主）' : op.role === 'admin' ? '（管理）' : '')"
+          />
+        </el-select>
         <el-date-picker
           v-model="dateRange"
           type="datetimerange"
@@ -351,11 +431,14 @@
         <button class="action-btn action-btn-outline" @click="resetFilter">重置</button>
       </div>
 
-      <!-- 操作者排行 -->
+      <!-- 操作者排行：行内仅展示前 3，完整 TOP20 通过弹窗查看 -->
       <div class="rank-section" v-if="topOps.length > 0">
-        <div class="rank-title">操作者排行 TOP 10</div>
+        <div class="rank-head">
+          <span class="rank-title">操作者排行</span>
+          <button class="rank-more-btn" @click="rankDialog = true">查看 TOP20</button>
+        </div>
         <div class="rank-list">
-          <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-item">
+          <div v-for="(op, idx) in topOps.slice(0, 3)" :key="op.operator_id" class="rank-item">
             <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
             <img class="rank-avatar" :src="'https://q1.qlogo.cn/g?b=qq&nk=' + op.operator_id + '&s=100'" alt="头像">
             <span class="rank-id">{{ op.operator_id }}</span>
@@ -363,6 +446,18 @@
           </div>
         </div>
       </div>
+
+      <!-- 操作者排行完整榜单弹窗（TOP20） -->
+      <el-dialog v-model="rankDialog" title="操作者排行 TOP 20" :width="rankDialogWidth">
+        <div class="rank-dialog-list">
+          <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-dialog-item">
+            <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
+            <img class="rank-avatar" :src="'https://q1.qlogo.cn/g?b=qq&nk=' + op.operator_id + '&s=100'" alt="头像">
+            <span class="rank-id">{{ op.operator_id }}</span>
+            <span class="rank-cnt">{{ op.cnt }} 次</span>
+          </div>
+        </div>
+      </el-dialog>
 
       <!-- 空状态 -->
       <div v-if="records.length === 0" class="empty-tip">暂无数据</div>
@@ -428,7 +523,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
@@ -452,6 +547,15 @@ const activeTab = ref<'kick' | 'mute' | 'approve'>('kick')
 
 /** 筛选条件：群号 */
 const filterGid = ref('')
+
+/** 筛选条件：操作者 ID（空表示全部） */
+const filterOperator = ref('')
+
+/** 操作者下拉选项：已记录操作者与实际群管理/群主合并 [{id, recorded, role}] */
+const operatorOptions = ref<{ id: string; recorded: boolean; role: string }[]>([])
+
+/** 所有已记录过数据的群号（来自 /api/manage/groups），用于群快捷筛选补全 */
+const recordedGroupIds = ref<string[]>([])
 
 /** 时间范围选择器绑定值，value-format="x" 返回毫秒时间戳数字 */
 const dateRange = ref<[number, number] | null>((() => {
@@ -503,47 +607,43 @@ const PAGE_SIZE = 20
 /** 操作者排行列表 */
 const topOps = ref<any[]>([])
 
+/** 操作者排行完整榜单弹窗显隐 */
+const rankDialog = ref(false)
+
+/** 窗口宽度，用于响应式（移动端弹窗宽度自适应） */
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+function onResize() {
+  windowWidth.value = window.innerWidth
+}
+
+/** 排行弹窗宽度：窄屏占满、桌面固定 420px */
+const rankDialogWidth = computed(() => (windowWidth.value <= 768 ? '92%' : '420px'))
+
 /** 群列表，用于快捷筛选 chip */
 const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]>([])
 
 /** 总页数（至少为1） */
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
 
-/** 从当前记录中提取去重群号，用于快捷筛选补充 */
-const recordGroupIds = computed<string[]>(() => {
-  const ids = new Set<string>()
-  for (const r of records.value) {
-    if (r.group_id) ids.add(String(r.group_id))
-  }
-  return Array.from(ids).sort()
-})
-
 /**
- * 合并 groupList(k4) 与记录中的群号，生成最终快捷筛选列表
- * groupList 中已知的群优先展示（含名称和头像），记录中额外出现的群以群号兜底
+ * 群快捷筛选列表：以「所有已记录过数据的群号」(/api/manage/groups) 为准，
+ * 名称/头像优先从 groupList 取，缺失时以群号兜底。
+ * 修复点：原先只能依赖 bot 在线群列表 + 当前页记录中的群号，会漏掉历史群导致无法选择过滤。
  * @return 群筛选项数组 { gid, name, icon }
  */
 const activeGroupChips = computed<{ gid: string; name: string; icon: string }[]>(() => {
-  const result: { gid: string; name: string; icon: string }[] = []
-  const seen = new Set<string>()
-  // 优先展示 groupList 中有 k4 标记的群（含名称和头像）
+  const nameMap = new Map<string, { name: string; icon: string }>()
   for (const g of groupList.value) {
-    if (g.k4) {
-      const gid = String(g.tid)
-      if (!seen.has(gid)) {
-        seen.add(gid)
-        result.push({ gid, name: g.name, icon: g.icon })
-      }
-    }
+    nameMap.set(String(g.tid), { name: g.name, icon: g.icon })
   }
-  // 补充当前记录中出现但 groupList 未收录的群，以群号作为显示名称
-  for (const gid of recordGroupIds.value) {
-    if (!seen.has(gid)) {
-      seen.add(gid)
-      result.push({ gid, name: gid, icon: `https://p.qlogo.cn/gh/${gid}/${gid}/0` })
+  return recordedGroupIds.value.map(gid => {
+    const info = nameMap.get(gid)
+    return {
+      gid,
+      name: info?.name || gid,
+      icon: info?.icon || `https://p.qlogo.cn/gh/${gid}/${gid}/0`,
     }
-  }
-  return result
+  })
 })
 
 /**
@@ -566,7 +666,14 @@ onMounted(() => {
   if (keyOk.value) {
     loadData()
     loadGroupList()
+    loadGroups()
+    loadOperators()
   }
+  window.addEventListener('resize', onResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
 })
 
 /**
@@ -583,6 +690,8 @@ function submitKey() {
   keyInput.value = ''
   loadData()
   loadGroupList()
+  loadGroups()
+  loadOperators()
 }
 
 /**
@@ -594,6 +703,9 @@ function clearKey() {
   records.value = []
   topOps.value = []
   groupList.value = []
+  recordedGroupIds.value = []
+  operatorOptions.value = []
+  filterOperator.value = ''
 }
 
 /**
@@ -602,6 +714,26 @@ function clearKey() {
 function loadGroupList() {
   makeHttp().get('/api/glist').then(res => {
     groupList.value = res.data || []
+  }).catch(() => {})
+}
+
+/**
+ * 加载所有已记录过数据的群号，用于群快捷筛选补全（修复漏群 bug）
+ */
+function loadGroups() {
+  makeHttp().get('/api/manage/groups').then(res => {
+    recordedGroupIds.value = (res.data || []).map((x: any) => String(x))
+  }).catch(() => {})
+}
+
+/**
+ * 加载操作者下拉选项：已记录操作者与实际群管理/群主合并。
+ * 随当前群号过滤（gid>0 时仅取该群管理员）。
+ */
+function loadOperators() {
+  const gid = filterGid.value.trim().replace(/\D/g, '') || '0'
+  makeHttp().get(`/api/manage/operators?gid=${gid}`).then(res => {
+    operatorOptions.value = res.data || []
   }).catch(() => {})
 }
 
@@ -623,11 +755,14 @@ function switchTab(tab: 'kick' | 'mute' | 'approve') {
 function buildParams(extra: Record<string, string | number> = {}): string {
   // 去除可能存在的非数字前缀（如 "g1041541077" → "1041541077"）
   const gid = filterGid.value.trim().replace(/\D/g, '') || '0'
+  // 操作者 ID 过滤，空表示全部
+  const operator = filterOperator.value.trim().replace(/\D/g, '') || '0'
   // value-format="x" 返回毫秒时间戳字符串，未选择则为 0
   const startTime = dateRange.value ? dateRange.value[0] : '0'
   const endTime = dateRange.value ? dateRange.value[1] : '0'
   const params = new URLSearchParams({
     gid,
+    operator,
     startTime: String(startTime),
     endTime: String(endTime),
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, String(v)]))
@@ -643,6 +778,7 @@ function selectGroup(tid: string) {
   filterGid.value = tid
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -651,6 +787,7 @@ function selectGroup(tid: string) {
 function doSearch() {
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -658,9 +795,11 @@ function doSearch() {
  */
 function resetFilter() {
   filterGid.value = ''
+  filterOperator.value = ''
   dateRange.value = null
   page.value = 1
   loadData()
+  loadOperators()
 }
 
 /**
@@ -688,7 +827,7 @@ function loadData() {
     }
   })
 
-  http.get(`${base}/top-operators?${buildParams({ limit: 10 })}`).then(res => {
+  http.get(`${base}/top-operators?${buildParams({ limit: 20 })}`).then(res => {
     topOps.value = res.data || []
   }).catch(() => {})
 }
