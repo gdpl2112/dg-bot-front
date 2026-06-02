@@ -199,12 +199,47 @@
   background: rgba(124, 58, 237, 0.05);
   border: 1px solid rgba(124, 58, 237, 0.12);
 }
+.rank-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
 .rank-title {
   font-size: 0.88rem;
   font-weight: 700;
   color: #7c3aed;
-  margin-bottom: 0.6rem;
 }
+.rank-more-btn {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  background: rgba(124, 58, 237, 0.08);
+  color: #7c3aed;
+  border-radius: 8px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.rank-more-btn:hover { background: rgba(124, 58, 237, 0.16); }
+.rank-dialog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.rank-dialog-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  font-size: 0.86rem;
+}
+.rank-dialog-item .rank-id { flex: 1; }
 .rank-list {
   display: flex;
   flex-wrap: wrap;
@@ -367,11 +402,14 @@
         <button class="action-btn action-btn-outline" @click="resetFilter">重置</button>
       </div>
 
-      <!-- 操作者排行 -->
+      <!-- 操作者排行：行内仅展示前 3，完整 TOP20 通过弹窗查看 -->
       <div class="rank-section" v-if="topOps.length > 0">
-        <div class="rank-title">操作者排行 TOP 20</div>
+        <div class="rank-head">
+          <span class="rank-title">操作者排行</span>
+          <button class="rank-more-btn" @click="rankDialog = true">查看 TOP20</button>
+        </div>
         <div class="rank-list">
-          <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-item">
+          <div v-for="(op, idx) in topOps.slice(0, 3)" :key="op.operator_id" class="rank-item">
             <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
             <img class="rank-avatar" :src="'https://q1.qlogo.cn/g?b=qq&nk=' + op.operator_id + '&s=100'" alt="头像">
             <span class="rank-id">{{ op.operator_id }}</span>
@@ -379,6 +417,18 @@
           </div>
         </div>
       </div>
+
+      <!-- 操作者排行完整榜单弹窗（TOP20） -->
+      <el-dialog v-model="rankDialog" title="操作者排行 TOP 20" width="420px">
+        <div class="rank-dialog-list">
+          <div v-for="(op, idx) in topOps" :key="op.operator_id" class="rank-dialog-item">
+            <span :class="['rank-idx', idx < 3 ? 'rank-top3' : '']">{{ idx + 1 }}</span>
+            <img class="rank-avatar" :src="'https://q1.qlogo.cn/g?b=qq&nk=' + op.operator_id + '&s=100'" alt="头像">
+            <span class="rank-id">{{ op.operator_id }}</span>
+            <span class="rank-cnt">{{ op.cnt }} 次</span>
+          </div>
+        </div>
+      </el-dialog>
 
       <!-- 空状态 -->
       <div v-if="records.length === 0" class="empty-tip">暂无数据</div>
@@ -527,6 +577,9 @@ const PAGE_SIZE = 20
 
 /** 操作者排行列表 */
 const topOps = ref<any[]>([])
+
+/** 操作者排行完整榜单弹窗显隐 */
+const rankDialog = ref(false)
 
 /** 群列表，用于快捷筛选 chip */
 const groupList = ref<{ tid: number; name: string; icon: string; k4: boolean }[]>([])
