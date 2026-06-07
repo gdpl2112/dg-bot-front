@@ -60,8 +60,8 @@
 .modal-box {
   background: #f8fafc;
   border-radius: 18px;
-  width: min(580px, 94vw);
-  max-height: 82vh;
+  width: min(780px, 94vw);
+  max-height: 60vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
@@ -69,6 +69,38 @@
   overflow: hidden;
 }
 @keyframes slideUp { from { transform: translateY(24px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+
+/* 移动端：全宽居中 */
+@media (max-width: 640px) {
+  .modal-box {
+    width: 96vw;
+    max-width: 96vw;
+    max-height: 80vh;
+    border-radius: 14px;
+  }
+  .contact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+    gap: 0.4rem !important;
+  }
+  .contact-avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .contact-card {
+    padding: 0.5rem 0.3rem !important;
+  }
+}
+/* 宽屏：更宽布局，更多列 */
+@media (min-width: 1024px) {
+  .modal-box {
+    margin-top: 20vh;
+    width: min(900px, 88vw);
+    max-height: 70vh;
+  }
+  .contact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
 .modal-header {
   display: flex;
   align-items: center;
@@ -168,6 +200,7 @@
 /* 列表 */
 .modal-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 0.3rem 1rem 1rem;
 }
