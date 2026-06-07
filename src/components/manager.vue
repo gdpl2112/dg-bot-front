@@ -101,10 +101,10 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.3rem;
 }
-.toggle-group-5 {
-  grid-template-columns: repeat(3, 1fr);
+.toggle-group-4 {
+  grid-template-columns: repeat(2, 1fr);
 }
-.toggle-group-5 .toggle-btn {
+.toggle-group-4 .toggle-btn {
   padding: 0.25rem 0.2rem;
   font-size: 0.75rem;
 }
@@ -143,8 +143,8 @@
         按钮依次为 <strong style="color:#16a34a">API调用</strong> ·
         <strong style="color:#15803d">撤回监听</strong> ·
         <strong style="color:#ca8a04">被动回复</strong> ·
-        <strong style="color:#2563eb">内置功能</strong> ·
-        <strong style="color:#7c3aed">记录数据</strong> 的控制开关，红色=已关闭，默认开启
+        <strong style="color:#7c3aed">记录数据</strong> 的控制开关，红色=已关闭，默认开启<br>
+        <em style="color:#2563eb">内置功能开关已移至「内置扩展」页面，可按功能单独设置启用的群</em>
       </div>
       <div class="search-row">
         <input type="text" v-model="gSearch" placeholder="检索群..." @input="filterGroups">
@@ -153,7 +153,7 @@
         <div v-for="e in glist" :key="e.tid" class="contact-card">
           <img class="contact-avatar" :src="e.icon" alt="头像">
           <div class="contact-name">{{ e.name }}</div>
-          <div class="toggle-group toggle-group-5">
+          <div class="toggle-group toggle-group-4">
             <button :class="['toggle-btn', e.k0 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm0(e.tid)" title="API调用开关">
               {{ e.k0 ? 'API开' : 'API关' }}
             </button>
@@ -162,9 +162,6 @@
             </button>
             <button :class="['toggle-btn', e.k2 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm2(e.tid)" title="被动回复开关">
               {{ e.k2 ? '复开' : '复关' }}
-            </button>
-            <button :class="['toggle-btn', e.k3 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm3(e.tid)" title="内置功能开关">
-              {{ e.k3 ? '内开' : '内关' }}
             </button>
             <button :class="['toggle-btn', e.k4 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm4(e.tid)" title="记录数据开关">
               {{ e.k4 ? '记开' : '记关' }}
@@ -179,8 +176,8 @@
       <div class="info-bar">
         按钮依次为 <strong style="color:#16a34a">API调用</strong> ·
         <strong style="color:#15803d">撤回监听</strong> ·
-        <strong style="color:#ca8a04">被动回复</strong> ·
-        <strong style="color:#2563eb">内置功能</strong> 的控制开关，红色=已关闭，默认开启
+        <strong style="color:#ca8a04">被动回复</strong> 的控制开关，红色=已关闭，默认开启<br>
+        <em style="color:#2563eb">内置功能开关已移至「内置扩展」页面，可按功能单独设置启用的好友</em>
       </div>
       <div class="search-row">
         <input type="text" v-model="fSearch" placeholder="检索好友..." @input="filterFriends">
@@ -198,9 +195,6 @@
             </button>
             <button :class="['toggle-btn', e.k2 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm2(e.tid)" title="被动回复开关">
               {{ e.k2 ? '复开' : '复关' }}
-            </button>
-            <button :class="['toggle-btn', e.k3 ? 'toggle-btn-on' : 'toggle-btn-off']" @click="gm3(e.tid)" title="内置功能开关">
-              {{ e.k3 ? '内开' : '内关' }}
             </button>
           </div>
         </div>
@@ -329,13 +323,6 @@ function gm2(tid: number) {
   axios.get("/api/gc2?tid=" + tid).then(function (response) {
     if (response.data === true) {
       glist.value.forEach((e: any) => { if (e.tid === tid) e.k2 = !e.k2; })
-    }
-  }).catch(function (err) { alert(err); })
-}
-function gm3(tid: number) {
-  axios.get("/api/gc3?tid=" + tid).then(function (response) {
-    if (response.data === true) {
-      glist.value.forEach((e: any) => { if (e.tid === tid) e.k3 = !e.k3; })
     }
   }).catch(function (err) { alert(err); })
 }
